@@ -14,7 +14,7 @@ contract NFTFactory is ERC721, ERC721Enumerable {
     mapping(uint256 => string) private _tokenURIs;
     event NewTokenURI(address _owner, uint tokenId, string _newtokenUri);
 
-    constructor()ERC721("Vasa","VS"){
+    constructor()ERC721("Auction","AUC"){
         // name = _name;
         // symbol = _symbol;
     }

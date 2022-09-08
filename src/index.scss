@@ -1,0 +1,117 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+a {
+  text-decoration: none;
+}
+li {
+  list-style: none;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+}
+$whiteColor: #ffffff;
+$blackColor: #000000;
+$mainTextColor: #bfbfbf;
+.App {
+  background-color: $whiteColor;
+  height: 100vh;
+  display: flex;
+}
+.wrapper {
+  background-color: $whiteColor;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.container {
+  padding: 30px 100px 0px 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+////////////////////////////Header
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__menu {
+    color: $mainTextColor;
+    padding-top: 5px;
+    ul {
+      display: flex;
+      li {
+        margin-right: 15px;
+        font-size: 1.5em;
+        &:hover {
+          color: #07c098;
+        }
+      }
+    }
+  }
+  &__logo {
+    color: $mainTextColor;
+    margin-right: 50px;
+    &:hover {
+      color: #07c098;
+    }
+  }
+  &__header__connect {
+  }
+}
+////////////////////////////Main
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex: 1;
+}
+.mint {
+  background-color: #bfbfbf;
+  padding: 20px;
+  width: 60%;
+  height: 60vh;
+  &__container {
+    display: flex;
+    justify-content: center;
+  }
+  &__picture {
+    width: 20%;
+    img {
+      max-width: 100%;
+    }
+  }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  &__title {
+    input {
+      margin-bottom: 10px;
+    }
+  }
+  &__description {
+  }
+  &__upload {
+  }
+}
+////////////////////////footer
+.footer {
+  display: flex;
+
+  background-color: #000000;
+}
