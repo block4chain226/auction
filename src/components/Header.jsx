@@ -4,8 +4,7 @@ import AuthContext from "../context/AuthContext";
 import "../index.scss";
 
 const Header = () => {
-  const [showMint, setShowMint] = useState(false);
-  const { accounts } = useContext(AuthContext);
+  const { accounts, setShowMint } = useContext(AuthContext);
   return (
     <header className="header">
       <div className="header__logo">
@@ -20,7 +19,11 @@ const Header = () => {
         </ul>
       </div>
       <div className="header__connect">
-        {accounts != "" ? <button>Start Collection</button> : <Auth />}
+        {accounts != "" ? (
+          <button onClick={() => setShowMint(true)}>Start Collection</button>
+        ) : (
+          <Auth />
+        )}
       </div>
     </header>
   );

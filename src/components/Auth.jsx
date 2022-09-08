@@ -18,7 +18,7 @@ const Auth = () => {
     }
   }
   return (
-    <button className="button" variant="contained" onClick={connect}>
+    <button className="button" onClick={connect}>
       Connect
     </button>
   );
