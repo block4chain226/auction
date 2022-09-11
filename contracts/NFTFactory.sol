@@ -8,20 +8,39 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+
 contract NFTFactory is ERC721, ERC721Enumerable {
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIdCounter;
+    uint fee;
+    address payable  factoryOwner ;
     // string private name;
     // string private symbol;
     mapping(uint256 => string) private _tokenURIs;
     event NewTokenURI(address _owner, uint tokenId, string _newtokenUri);
+    // event Transfer(address indexed from, address indexed to, uint tokenId);
 
-    constructor()ERC721("Auction","AUC"){
+    constructor(uint _fee)ERC721("Auction","AUC"){
         // name = _name;
         // symbol = _symbol;
+        fee = _fee;
+        factoryOwner = payable(msg.sender);
     }
 
-    function safeMint(address to, uint tokenId) public {
-        _safeMint(to, tokenId);
+    function safeMint(address to, string memory url) public payable {
+        // tokenId = tokenId+1;
+        require(msg.value>=fee, "not enough ether sent");
+        _tokenIdCounter.increment();
+        _safeMint(to, _tokenIdCounter.current());
+        setTokenURI(_tokenIdCounter.current(), url);
+        (bool success,) = factoryOwner.call{value:fee}("");
+        require(success, "fee has not sent");
+        if(address(this).balance != 0 && msg.value - fee > 0){
+            (bool success1,) = payable(msg.sender).call{value:address(this).balance}("");
+            require(success1, "fee has not sent");
+        }
     }
+   
    
     function _safeMint(address to, uint tokenId) internal override{
         super._safeMint(to, tokenId);
@@ -65,6 +84,7 @@ contract NFTFactory is ERC721, ERC721Enumerable {
 
         return super.tokenURI(tokenId);
     }
+
 
     function supportsInterface(bytes4 interfaceId)
         public

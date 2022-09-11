@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
+import {ethers} from "ethers";
 import "../index.scss";
 import Web3StorageContext from "../context/Web3StorageContext";
 import { JsonRpcBatchProvider } from "@ethersproject/providers";
+import ProviderContext from "../context/ProviderContext";
+import AuthContext from "../context/AuthContext";
+const eventsAbi = require("../events.json");
 
 const Mint = () => {
   const [title, setTitle] = useState("");
@@ -12,20 +16,45 @@ const Mint = () => {
   const [fetchedData, setFetchedData] = useState([]);
   const [fetchedImg, setFetchedImg] = useState([]);
   const { makeStorageClient } = useContext(Web3StorageContext);
+  const { contract } = useContext(ProviderContext);
+  const { accounts } = useContext(AuthContext);
+  //0x2Af36997F2813567238aCD6bC3f6dfCd776929a0
 
-  async function uploadFiles(e) {
+  async function MintNFT(e) {
     if (file[0] && title && text) {
-      let mass = [];
-      const client = makeStorageClient();
-      const content = makeFileObjects(title, text);
-      mass.push(...content);
-      mass.push(...file);
-      console.log(mass);
-      const cid = await client.put(mass);
-      console.log("full url: ", `https://ipfs.io/ipfs/${cid}`);
+      //get files url
+      let url = await uploadFiles(e);
+      url = `https://ipfs.io/ipfs/${url}`;
+      //minting
+      const mint = await contract.safeMint(accounts[0], url, {value: ethers.utils.parseEther("0.0001")});
+      //event logs
+      await contract.on("Transfer", (from, to, _tokenId) => {
+      console.log("Transfer:", from, to, Number(_tokenId));
+      });
+      contract.on("NewTokenURI", (_owner, _tokenId, _newtokenUri) => {
+      console.log("NewTokenURI:", _owner, _tokenId, _newtokenUri);
+      });
     } else {
       console.log("not all filled");
     }
+  }
+
+  async function filter() {
+    const filter = contract.filters.Transfer(null, null, null);
+    const results = await contract.queryFilter(filter);
+    console.log("r", results);
+  }
+
+  async function uploadFiles(e) {
+    let mass = [];
+    const client = makeStorageClient();
+    const content = makeFileObjects(title, text);
+    mass.push(...content);
+    mass.push(...file);
+    console.log(mass);
+    const cid = await client.put(mass);
+    console.log("cid", cid);
+    return cid;
   }
 
   function makeFileObjects(title, text, url) {
@@ -44,6 +73,7 @@ const Mint = () => {
     return files;
   }
 
+  /////////////////////////////////////////////output
   async function getCidInfo(cid) {
     const client = makeStorageClient();
     const status = await client.status(cid);
@@ -123,7 +153,8 @@ const Mint = () => {
               accept=".jpeg, .png, .jpg"
               onChange={(e) => setFile(e.target.files)}
             />
-            <button onClick={(e) => uploadFiles(e)}>upload</button>
+            <button onClick={(e) => MintNFT(e)}>upload</button>
+            <button onClick={filter}>filter</button>
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import Auth from "../components/Auth";
 import AuthContext from "../context/AuthContext";
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom';
 import "../index.scss";
 
 const Header = () => {
@@ -12,10 +13,10 @@ const Header = () => {
       </div>
       <div className="header__menu">
         <ul>
-          <li>Home</li>
-          <li>Activity</li>
-          <li>Category</li>
-          <li>Browse</li>
+          <Link to="/">Home</Link>
+          <Link to="/mynft">My NFT</Link>
+          <Link to="mynft">Active Auctions</Link>
+          <Link to="mynft">Auctions Participation</Link> 
         </ul>
       </div>
       <div className="header__connect">
