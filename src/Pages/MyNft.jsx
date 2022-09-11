@@ -13,6 +13,8 @@ const MyNft = () => {
 
   /////////////finish useFetcAllhNft
   async function getCidInfo(cid) {
+    if(accounts.length>0){
+      console.log(accounts[0]);
     const client = makeStorageClient();
     const status = await client.status(cid);
     if (status) {
@@ -20,6 +22,10 @@ const MyNft = () => {
     } else {
       console.log("smth going wrong!");
     }
+    }else{
+      console.log("login!");
+    }
+   
   }
 
   async function retrieve(cid) {
@@ -39,39 +45,32 @@ const MyNft = () => {
   }
   function fetchData(arr) {
     let array = [];
-    // arr.map(async (item) => {
-    //   const response = await fetch(item);
-    //   const contentType = response.headers.get("content-type");
-    //   if (contentType && contentType.indexOf("application/json") !== -1) {
-    //     response.json().then((data) => {
-    //       array.push(Object.values(data));
-    //     });
-    //   } else {
-    //     array.push(Object.values(item));
-    //   }
-    //   setLinks((links) => [...links, array]);
-    // });
-
-    //////
     new  Promise((res,rej)=>{
       arr.map(async(item)=>{
         await fetch(item).then(data=>{
           if(data.headers.get("content-type")&&data.headers.get("content-type").indexOf("application/json") !== -1){
             data.json().then(data1=>{
               array.push(Object.values(data1));
+               setLinks((links) => [...links, array]);
             })
           }else{
             array.push(Object.values(item));
+             setLinks((links) => [...links, array]);
           }
-          setLinks((links) => [...links, array]);
+        
+          
+   
         })
+         
       })
+      
     });
+    
   }
 
   useEffect(() => {
     getCidInfo("bafybeia6ipmg4hjfqhqsyxlvnhcheqpgiya7jh3wr4vkbpubculzgxdxxm");
-  }, []);
+  }, [accounts]);
   return (
     <>
       <div
