@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import cl from "./NftItem.module.css";
 import imf from "../../img/image-10.jpeg";
 import imf1 from "../../img/image9.jpeg";
@@ -7,7 +7,7 @@ import Web3StorageContext from "../../context/Web3StorageContext";
 import { useContext } from "react";
 import { useState } from "react";
 
-const NftItem = ({links}) => {
+const NftItem = ({ links }) => {
   // const { makeStorageClient } = useContext(Web3StorageContext);
   // const [links, setLinks] = useState([]);
 
@@ -56,36 +56,35 @@ const NftItem = ({links}) => {
   //       // setLinks((links) => [...links, item]);
   //     }
   //   });
-   
+
   //   setLinks(array);
   //    console.log("array: ",array);
-    
+
   // }
-  
+
   // useEffect(() => {
   //   getCidInfo("bafybeia6ipmg4hjfqhqsyxlvnhcheqpgiya7jh3wr4vkbpubculzgxdxxm");
   // }, []);
   return (
     <>
       {/* <div className={cl.container}> */}
-       
-        {/* <div className={cl.col}>
-         <div className={cl.item}>
-            <div className={cl.image}>
-              <img src={(links[0][0]).join("")}></img>
-             </div>
-             <div className={cl.info}>
-              <div className={cl.name}>
-                <p>{links[0][1]}</p>      
-               </div>
-              <div className={cl.price}>
-                     <p>{links[0][2]}</p>
-              </div>
-             </div>
-           </div>
-        </div> */}
-    
-        
+
+      <div className={cl.col}>
+        <div className={cl.item}>
+          <div className={cl.image}>
+            <img src={links[0][0].join("")}></img>
+          </div>
+          <div className={cl.info}>
+            <div className={cl.name}>
+              <p>{links[0][1]}</p>
+            </div>
+            <div className={cl.price}>
+              <p>{links[0][2]}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* </div> */}
     </>
   );
