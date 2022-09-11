@@ -1,9 +1,12 @@
 import React from "react";
+import NFTGallery from "../components/NFTGallery/NFTGallery";
 
 const MyNft = () => {
-  return <div>
-    <h1>My NFT</h1>
-  </div>;
+  return (
+    <>
+      <NFTGallery />
+    </>
+  );
 };
 
 export default MyNft;

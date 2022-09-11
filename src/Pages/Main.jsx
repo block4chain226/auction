@@ -6,15 +6,11 @@ import "../index.scss";
 const Main = () => {
   const { accounts, showMint } = useContext(AuthContext);
 
-  return(  
+  return (
     <>
-  <main className="main">
-    {showMint ? <Mint /> : ""}
-  </main>
-  </>
-  )
-
- 
+      <main className="main">{showMint ? <Mint /> : ""}</main>
+    </>
+  );
 };
 
 export default Main;

@@ -34,9 +34,10 @@ $mainTextColor: #bfbfbf;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 101px;
 }
 .container {
-  padding: 30px 100px 0px 100px;
+  padding: 0px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -44,15 +45,25 @@ $mainTextColor: #bfbfbf;
 }
 ////////////////////////////Header
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: fixed;
+  padding: 30px 0px;
+  // background-color: #07c098;
+  background-color: #ffffff;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
   &__menu {
     color: $mainTextColor;
     padding-top: 5px;
     ul {
       display: flex;
-      li {
+      .link {
         margin-right: 15px;
         font-size: 1.5em;
         &:hover {

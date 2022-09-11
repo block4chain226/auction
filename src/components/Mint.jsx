@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import {ethers} from "ethers";
+import { ethers } from "ethers";
 import "../index.scss";
 import Web3StorageContext from "../context/Web3StorageContext";
 import { JsonRpcBatchProvider } from "@ethersproject/providers";
@@ -26,13 +26,15 @@ const Mint = () => {
       let url = await uploadFiles(e);
       url = `https://ipfs.io/ipfs/${url}`;
       //minting
-      const mint = await contract.safeMint(accounts[0], url, {value: ethers.utils.parseEther("0.0001")});
+      const mint = await contract.safeMint(accounts[0], url, {
+        value: ethers.utils.parseEther("0.0001"),
+      });
       //event logs
       await contract.on("Transfer", (from, to, _tokenId) => {
-      console.log("Transfer:", from, to, Number(_tokenId));
+        console.log("Transfer:", from, to, Number(_tokenId));
       });
       contract.on("NewTokenURI", (_owner, _tokenId, _newtokenUri) => {
-      console.log("NewTokenURI:", _owner, _tokenId, _newtokenUri);
+        console.log("NewTokenURI:", _owner, _tokenId, _newtokenUri);
       });
     } else {
       console.log("not all filled");
