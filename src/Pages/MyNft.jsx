@@ -9,23 +9,35 @@ const MyNft = () => {
   const { accounts } = useContext(AuthContext);
   const [links, setLinks] = useState([]);
   /////////Error: invalid address or ENS name (argument="name", value=undefined, code=INVALID_ARGUMENT, version=contracts/5.7.0)
-  const r = useFetchNft(accounts[0]);
+
+  const { data, loading, error } = useFetchNft(accounts[0]);
+
+  // useEffect(() => {
+  //   getCidInfo("bafybeia6ipmg4hjfqhqsyxlvnhcheqpgiya7jh3wr4vkbpubculzgxdxxm");
+  //   console.log("data", data);
+  // }, [accounts]);
+
+  // if (loading) return <p>"loading..."</p>;
+  if (error) console.log("fetching error!");
+  // useEffect(() => {
+  //   console.log("balance", data);
+  //   console.log("error", error);
+  // }, []);
 
   /////////////finish useFetcAllhNft
   async function getCidInfo(cid) {
-    if(accounts.length>0){
+    if (accounts.length > 0) {
       console.log(accounts[0]);
-    const client = makeStorageClient();
-    const status = await client.status(cid);
-    if (status) {
-      retrieve(cid);
+      const client = makeStorageClient();
+      const status = await client.status(cid);
+      if (status) {
+        retrieve(cid);
+      } else {
+        console.log("smth going wrong!");
+      }
     } else {
-      console.log("smth going wrong!");
-    }
-    }else{
       console.log("login!");
     }
-   
   }
 
   async function retrieve(cid) {
@@ -45,32 +57,26 @@ const MyNft = () => {
   }
   function fetchData(arr) {
     let array = [];
-    new  Promise((res,rej)=>{
-      arr.map(async(item)=>{
-        await fetch(item).then(data=>{
-          if(data.headers.get("content-type")&&data.headers.get("content-type").indexOf("application/json") !== -1){
-            data.json().then(data1=>{
+    new Promise((res, rej) => {
+      arr.map(async (item) => {
+        await fetch(item).then((data) => {
+          if (
+            data.headers.get("content-type") &&
+            data.headers.get("content-type").indexOf("application/json") !== -1
+          ) {
+            data.json().then((data1) => {
               array.push(Object.values(data1));
-               setLinks((links) => [...links, array]);
-            })
-          }else{
+              setLinks((links) => [...links, array]);
+            });
+          } else {
             array.push(Object.values(item));
-             setLinks((links) => [...links, array]);
+            setLinks((links) => [...links, array]);
           }
-        
-          
-   
-        })
-         
-      })
-      
+        });
+      });
     });
-    
   }
 
-  useEffect(() => {
-    getCidInfo("bafybeia6ipmg4hjfqhqsyxlvnhcheqpgiya7jh3wr4vkbpubculzgxdxxm");
-  }, [accounts]);
   return (
     <>
       <div
@@ -84,11 +90,9 @@ const MyNft = () => {
           marginTop: "100px",
         }}
       >
-        {links.length > 0 ? (
-          <NftItem links={links} />
-        ) : (
-          <p>Have not the links</p>
-        )}
+        {loading ? <p>Loading...</p> : ""}
+        {data ? console.log(data) : ""}
+        {links.length > 0 ? <NftItem links={links} /> : ""}
       </div>
     </>
   );

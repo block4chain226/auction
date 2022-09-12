@@ -41,7 +41,6 @@ contract NFTFactory is ERC721, ERC721Enumerable {
         }
     }
    
-   
     function _safeMint(address to, uint tokenId) internal override{
         super._safeMint(to, tokenId);
     }

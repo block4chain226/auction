@@ -62,13 +62,8 @@ const NftItem = ({ links }) => {
 
   // }
 
-  // useEffect(() => {
-  //   getCidInfo("bafybeia6ipmg4hjfqhqsyxlvnhcheqpgiya7jh3wr4vkbpubculzgxdxxm");
-  // }, []);
   return (
     <>
-      {/* <div className={cl.container}> */}
-
       <div className={cl.col}>
         <div className={cl.item}>
           <div className={cl.image}>
@@ -84,8 +79,6 @@ const NftItem = ({ links }) => {
           </div>
         </div>
       </div>
-
-      {/* </div> */}
     </>
   );
 };
