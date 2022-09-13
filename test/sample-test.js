@@ -25,29 +25,54 @@ describe("NFTFactory", function () {
   });
   it("Should return all 3 factoryOwners tokensId", async () => {
     ///minting
-     const contractBalanceBefore = await ethers.provider.getBalance(nftContract.address);
-    console.log("contractBefore: ", ethers.utils.formatEther(contractBalanceBefore));
+    const contractBalanceBefore = await ethers.provider.getBalance(
+      nftContract.address
+    );
+    console.log(
+      "contractBefore: ",
+      ethers.utils.formatEther(contractBalanceBefore)
+    );
 
-     const ownerBalanceBefore = await ethers.provider.getBalance(factoryOwner.address);
-    console.log("ownerBalanceBefore: ", ethers.utils.formatEther(ownerBalanceBefore));
+    const ownerBalanceBefore = await ethers.provider.getBalance(
+      factoryOwner.address
+    );
+    console.log(
+      "ownerBalanceBefore: ",
+      ethers.utils.formatEther(ownerBalanceBefore)
+    );
 
- const addr1BalanceBefore = await ethers.provider.getBalance(addr1.address);
-    console.log("addr1BalanceBefore: ", ethers.utils.formatEther(addr1BalanceBefore));
+    const addr1BalanceBefore = await ethers.provider.getBalance(addr1.address);
+    console.log(
+      "addr1BalanceBefore: ",
+      ethers.utils.formatEther(addr1BalanceBefore)
+    );
 
     await nftContract.connect(addr1).safeMint(addr1.address, {
       value: ethers.utils.parseEther("2.0"),
     });
 
-    
-    const contractBalanceAfter = await ethers.provider.getBalance(nftContract.address);
-    console.log("contractAfter: ", ethers.utils.formatEther(contractBalanceAfter));
+    const contractBalanceAfter = await ethers.provider.getBalance(
+      nftContract.address
+    );
+    console.log(
+      "contractAfter: ",
+      ethers.utils.formatEther(contractBalanceAfter)
+    );
 
     const addr1BalanceAfter = await ethers.provider.getBalance(addr1.address);
-    console.log("addr1BalanceAfter: ", ethers.utils.formatEther(addr1BalanceAfter));
+    console.log(
+      "addr1BalanceAfter: ",
+      ethers.utils.formatEther(addr1BalanceAfter)
+    );
 
-    const ownerBalanceAfter = await ethers.provider.getBalance(factoryOwner.address);
-    console.log("ownerBalanceAfter: ", ethers.utils.formatEther(ownerBalanceAfter));
-  
+    const ownerBalanceAfter = await ethers.provider.getBalance(
+      factoryOwner.address
+    );
+    console.log(
+      "ownerBalanceAfter: ",
+      ethers.utils.formatEther(ownerBalanceAfter)
+    );
+
     // console.log("ownerBalance", ethers.utils.formatEther(ownerBalance));
     const balanceCount = await nftContract.balanceOf(addr1.address);
     let arr = [];
@@ -56,7 +81,6 @@ describe("NFTFactory", function () {
       arr.push(token);
     }
     console.log("arr: ", arr);
-    
   });
   it("should return tokenId 1", async () => {
     let tokensCount = await nftContract.totalSupply();
@@ -67,11 +91,25 @@ describe("NFTFactory", function () {
     console.log(await nftContract.factoryOwnerOf(2));
   });
 
-  it.only("should mint token with url", async () => {
-  const result = await nftContract.connect(addr1).safeMint(addr1.address, "http", {
-      value: ethers.utils.parseEther("1.0"),
-    });
+  it("should mint token with url", async () => {
+    const result = await nftContract
+      .connect(addr1)
+      .safeMint(addr1.address, "http", {
+        value: ethers.utils.parseEther("1.0"),
+      });
     console.log("result", result);
-   await expect(nftContract.tokenURI(1)).to.emit(nftContract, "NewTokenURI").withArgs(1, "http");
+    await expect(nftContract.tokenURI(1))
+      .to.emit(nftContract, "NewTokenURI")
+      .withArgs(1, "http");
+  });
+  it.only("Should return full url", async () => {
+    await nftContract.safeMint(
+      addr1.address,
+      "bafybeiff2q6s3gapx23zni3l6u7vyfdzjw5dbwjjbxdko5iiusca6k7kve",
+      { value: ethers.utils.parseEther("1") }
+    );
+    expect(await nftContract.tokenURI(1)).to.eq(
+      "https://ipfs.io/ipfs/bafybeiff2q6s3gapx23zni3l6u7vyfdzjw5dbwjjbxdko5iiusca6k7kve"
+    );
   });
 });

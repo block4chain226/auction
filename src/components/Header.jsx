@@ -30,7 +30,7 @@ const Header = () => {
         </div>
         <div className="header__connect">
           {accounts != "" ? (
-            <button onClick={() => setShowMint(true)}>Start Collection</button>
+            <button data-tag={"vasa"} onClick={(e) => setShowMint(true),(e)=>console.log(e.target.attributes.getNamedItem('data-tag').value)}>Start Collection</button>
           ) : (
             <Auth />
           )}

@@ -61,24 +61,31 @@ const NftItem = ({ links }) => {
   //    console.log("array: ",array);
 
   // }
-
+  useEffect(() => {
+    links.map((item, index) => {
+      console.log(`maps${index}`, item[0]);
+    });
+  }, [links]);
   return (
     <>
-      <div className={cl.col}>
-        <div className={cl.item}>
-          <div className={cl.image}>
-            <img src={links[0][0].join("")}></img>
-          </div>
-          <div className={cl.info}>
-            <div className={cl.name}>
-              <p>{links[0][1]}</p>
+   
+      {links.map((item, index) => (
+        <div data-tag={index} className={cl.col}>
+          <div className={cl.item}>
+            <div className={cl.image}>
+              <img src={item[0]}></img>
             </div>
-            <div className={cl.price}>
-              <p>{links[0][2]}</p>
+            <div className={cl.info}>
+              <div className={cl.name}>
+                <p>{item[1]}</p>
+              </div>
+              <div className={cl.price}>
+                <p>{item[2]}</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ))}
     </>
   );
 };

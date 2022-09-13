@@ -95,7 +95,7 @@ contract NFTFactory is ERC721, ERC721Enumerable {
     }
 
     function _baseURI() internal pure override returns (string memory) {
-        return "";
+        return "https://ipfs.io/ipfs/";
     }
     
 }

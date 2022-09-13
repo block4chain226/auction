@@ -24,7 +24,7 @@ const Mint = () => {
     if (file[0] && title && text) {
       //get files url
       let url = await uploadFiles(e);
-      url = `https://ipfs.io/ipfs/${url}`;
+      // url = `https://ipfs.io/ipfs/${url}`;
       //minting
       const mint = await contract.safeMint(accounts[0], url, {
         value: ethers.utils.parseEther("0.0001"),
@@ -34,17 +34,11 @@ const Mint = () => {
         console.log("Transfer:", from, to, Number(_tokenId));
       });
       contract.on("NewTokenURI", (_owner, _tokenId, _newtokenUri) => {
-        console.log("NewTokenURI:", _owner, _tokenId, _newtokenUri);
+        console.log("NewTokenURI:", _owner, Number(_tokenId), _newtokenUri);
       });
     } else {
       console.log("not all filled");
     }
-  }
-
-  async function filter() {
-    const filter = contract.filters.Transfer(null, null, null);
-    const results = await contract.queryFilter(filter);
-    console.log("r", results);
   }
 
   async function uploadFiles(e) {
@@ -156,7 +150,6 @@ const Mint = () => {
               onChange={(e) => setFile(e.target.files)}
             />
             <button onClick={(e) => MintNFT(e)}>upload</button>
-            <button onClick={filter}>filter</button>
           </div>
         </div>
       </div>

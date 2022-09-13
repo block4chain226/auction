@@ -8,7 +8,7 @@ const ProviderContext = createContext();
 export const ProviderProvider = ({ children }) => {
   let contract;
   const [updated, setUpdated] = useState(0);
-  const contractAddress = "0xF627b51Ee6F8778Eb144997D81Ed86E9619350B1";
+  const contractAddress = "0xe36bCA52B61c1912b8B80B0E7bD363AD9db00f48";
   async function getProvider(contractAddress) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();

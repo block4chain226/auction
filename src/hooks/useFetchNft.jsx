@@ -18,36 +18,34 @@ const useFetchNft = (accounts) => {
       let tokensURI = [];
       setStatus({ loading: true });
       const accountBalance = await contract.balanceOf(accounts);
-      for (let i = 0; i < accountBalance; i++) {
+      setBalance("accountBalance",accountBalance);
+    
+      if(Number(accountBalance)!==0){
+         for (let i = 0; i < accountBalance; i++) {
         let tokenId = await contract.tokenOfOwnerByIndex(accounts, i);
         let tokenURI = await contract.tokenURI(tokenId);
+        tokenURI = tokenURI.slice(21);
+      ////////////////////////////////////////////////////////////////////put just tokenURI
         tokensURI.push(tokenURI);
       }
       setBalance(accountBalance);
       setStatus({ loading: false, data: tokensURI });
-
-      const response = await fetch(status.data)
-        .then((res) => {
-          res.json();
-        })
-        .then((data) => {
-          console.log(data);
-        });
+      }else{
+        setStatus({ loading: false, error: "you have not tokens"});
+      }
+     
     } catch (err) {
       setStatus({ loading: false, error: err.toString() });
       console.log("err", err);
     }
   }
-
-  async function fetch(data) {}
-
   useEffect(() => {
     if (accounts) {
       getAllAccountTokensURIs();
     }
   }, [accounts]);
 
-  return { ...status };
+  return { ...status, balance };
 };
 
 export default useFetchNft;
