@@ -7,7 +7,7 @@ import Web3StorageContext from "../../context/Web3StorageContext";
 import { useContext } from "react";
 import { useState } from "react";
 
-const NftItem = ({ links }) => {
+const NftItem = ({ links, tokensId }) => {
   // const { makeStorageClient } = useContext(Web3StorageContext);
   // const [links, setLinks] = useState([]);
 
@@ -74,7 +74,13 @@ const NftItem = ({ links }) => {
       {links.map((item, index) => (
         <div key={item[1].toString()} className={cl.col}>
           <div className={cl.item}>
-            <div className={cl.image}>
+            <div
+              data-tag={tokensId[index]}
+              onClick={(e) => {
+                console.log(e.target.attributes.getNamedItem("data-tag"));
+              }}
+              className={cl.image}
+            >
               <img src={item[1]}></img>
             </div>
             <div className={cl.info}>
