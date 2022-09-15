@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import "../index.scss";
 import Web3StorageContext from "../context/Web3StorageContext";
-import { JsonRpcBatchProvider } from "@ethersproject/providers";
 import ProviderContext from "../context/ProviderContext";
 import AuthContext from "../context/AuthContext";
 const eventsAbi = require("../events.json");
@@ -11,20 +10,14 @@ const Mint = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [file, setFile] = useState([]);
-  const [fileUrl, setFileUrl] = useState("");
-  const [links, setLinks] = useState([]);
-  const [fetchedData, setFetchedData] = useState([]);
-  const [fetchedImg, setFetchedImg] = useState([]);
   const { makeStorageClient } = useContext(Web3StorageContext);
   const { contract } = useContext(ProviderContext);
   const { accounts } = useContext(AuthContext);
-  //0x2Af36997F2813567238aCD6bC3f6dfCd776929a0
 
   async function MintNFT(e) {
     if (file[0] && title && text) {
       //get files url
       let url = await uploadFiles(e);
-      // url = `https://ipfs.io/ipfs/${url}`;
       //minting
       const mint = await contract.safeMint(accounts[0], url, {
         value: ethers.utils.parseEther("0.0001"),
@@ -68,57 +61,6 @@ const Mint = () => {
     ];
     return files;
   }
-
-  /////////////////////////////////////////////output
-  async function getCidInfo(cid) {
-    const client = makeStorageClient();
-    const status = await client.status(cid);
-    if (status) {
-      retrieve(cid);
-    } else {
-      console.log("smth going wrong!");
-    }
-  }
-
-  async function retrieve(cid) {
-    let arr = [];
-    const client = makeStorageClient();
-    const res = await client.get(cid);
-    if (!res.ok) {
-      throw new Error(`failed to get${1}`);
-    } else {
-      const files = await res.files();
-      for (const file of files) {
-        console.log(`${file.cid} -- ${file.path} -- ${file.size}`);
-        arr.push(`https://ipfs.io/ipfs/${file.cid}`);
-      }
-    }
-    setLinks(arr);
-  }
-
-  function test() {
-    links.map(async (item) => {
-      const response = await fetch(item);
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        return response.json().then((data) => {
-          setFetchedData((fetchedData) => [
-            ...fetchedData,
-            Object.values(data),
-          ]);
-        });
-      } else {
-        setFetchedData((fetchedData) => [...fetchedData, item]);
-      }
-    });
-  }
-
-  useEffect(() => {
-    test();
-  }, [links]);
-  useEffect(() => {
-    getCidInfo(`bafybeihl5r6ryzbecdnu66dglu4tn5thsp5jlk3jtcyqepg36kt7jz77xu`);
-  }, []);
 
   const Example = ({ data }) => <img src={`data:image/jpeg;base64,${data}`} />;
   return (

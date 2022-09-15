@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import AuthContext from "../context/AuthContext";
+import MyButton from "../Ui/MyButton/ConnectButton";
 // import { Navigate, useNavigate } from "react-router-dom";
 
 const Auth = () => {
@@ -18,9 +19,9 @@ const Auth = () => {
     }
   }
   return (
-    <button className="button" onClick={connect}>
+    <MyButton className="button" onClick={connect}>
       Connect
-    </button>
+    </MyButton>
   );
 };
 

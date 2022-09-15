@@ -3,6 +3,7 @@ import Auth from "../components/Auth";
 import AuthContext from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import "../index.scss";
+import MyButton from "../Ui/MyButton/ConnectButton";
 
 const Header = () => {
   const { accounts, setShowMint } = useContext(AuthContext);
@@ -30,18 +31,9 @@ const Header = () => {
         </div>
         <div className="header__connect">
           {accounts != "" ? (
-            <button
-              data-tag={"vasa"}
-              onClick={
-                ((e) => setShowMint(true),
-                (e) =>
-                  console.log(
-                    e.target.attributes.getNamedItem("data-tag").value
-                  ))
-              }
-            >
+            <MyButton onClick={() => setShowMint(true)}>
               Start Collection
-            </button>
+            </MyButton>
           ) : (
             <Auth />
           )}

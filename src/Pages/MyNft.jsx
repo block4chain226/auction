@@ -8,27 +8,23 @@ const MyNft = () => {
   const { makeStorageClient } = useContext(Web3StorageContext);
   const { accounts } = useContext(AuthContext);
   const [links, setLinks] = useState([]);
-  const [update, setUpdate] = useState(false);
   const client = makeStorageClient();
+  const { data, tokensId, loading, error } = useFetchNft(accounts[0]);
 
-  const { data, tokensId, loading, error, balance } = useFetchNft(accounts[0]);
-
-  // if (loading) return <p>"loading..."</p>;
   if (error) console.log("fetching error!");
 
   useEffect(() => {
     if (data && data.length > 0 && accounts.length > 0) {
-      together();
+      getNfts();
     }
   }, [data]);
 
-  async function together() {
+  async function getNfts() {
     ///////////// retrieve
     const allLinks = await getLinks(data);
     //////////// fetchData
     const fetchedData = await fetchData(allLinks);
     setLinks(fetchedData);
-    console.log("fetchedData", fetchedData);
   }
 
   async function getLinks(arr) {
