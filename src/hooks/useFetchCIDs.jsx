@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import ProviderContext from "../context/ProviderContext";
 
-const useFetchNft = (accounts) => {
+const useFetchNft = (accounts, tokenId = null) => {
   const { contract } = useContext(ProviderContext);
   const [status, setStatus] = useState({
     loading: false,
@@ -12,6 +12,7 @@ const useFetchNft = (accounts) => {
 
   async function getAllAccountTokensURIs() {
     try {
+      console.log("getAllAccountTokensURIs");
       let tokensURI = [];
       let tokensIdArray = [];
       setStatus({ loading: true });
@@ -35,11 +36,24 @@ const useFetchNft = (accounts) => {
       console.log("err", err);
     }
   }
+
+async function second(){
+  console.log("second");
+}
+
   useEffect(() => {
-    if (accounts) {
+    if (accounts && tokenId === null) {
       getAllAccountTokensURIs();
     }
   }, [accounts]);
+
+  useEffect(() => {
+    if (accounts && tokenId !== null) {
+      second();
+    }
+  }, [accounts]);
+
+
 
   return { ...status };
 };

@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import NftDetails from "../NftDetails/NftDetails";
+import MyButton from "../../Ui/MyButton/MyButton";
 import cl from "./NftItem.module.css";
+import CreateAuction from "../CreateAuction/CreateAuction";
 
 const NftItem = ({ links, tokensId }) => {
   const [index, setIndex] = useState("");
+  const [createAuction, setCreateAuction] = useState(false);
   function details(e) {
     setIndex(e.currentTarget.attributes.getNamedItem("data-index").value);
   }
@@ -18,29 +21,24 @@ const NftItem = ({ links, tokensId }) => {
         links.map((item, index) => (
           <div
             data-id={tokensId[index]}
-            data-index={index}
-            onClick={(e) => {
-              details(e);
-            }}
-            key={item[1].toString()}
+            key={tokensId[index]}
             className={cl.col}
           >
-            <div className={cl.item}>
+            <div
+              onClick={(e) => {
+                details(e);
+              }}
+              data-index={index}
+              className={cl.item}
+            >
               <div className={cl.image}>
                 <img src={item[1]}></img>
               </div>
-              <div className={cl.info}>
-                <div className={cl.name}>
-                  <p>{item[0]}</p>
-                </div>
-                <div className={cl.price}>
-                  <p>{item[2]}</p>
-                </div>
-              </div>
             </div>
+            <MyButton>Start Auction</MyButton>
           </div>
         ))}
-      {index.length > 0 ? (
+      {index.length > 0 && !createAuction ? (
         <NftDetails
           arr={[links[index][1], links[index][0], links[index][2]]}
           closeDetails={closeDetails}
@@ -48,6 +46,7 @@ const NftItem = ({ links, tokensId }) => {
       ) : (
         ""
       )}
+      {createAuction && index.length < 1 ? <CreateAuction arr={links[index][1]} closeDetails={closeDetails} /> : ""}
     </>
   );
 };

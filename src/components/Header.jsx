@@ -3,7 +3,7 @@ import Auth from "../components/Auth";
 import AuthContext from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import "../index.scss";
-import MyButton from "../Ui/MyButton/ConnectButton";
+import MyButton from "../Ui/MyButton/MyButton";
 
 const Header = () => {
   const { accounts, setShowMint } = useContext(AuthContext);

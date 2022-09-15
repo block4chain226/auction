@@ -4,12 +4,15 @@ const { ethers } = require("hardhat");
 // use(solidity);
 
 describe("NFTFactory", function () {
-  let factoryOwner, addr1, addr2, NFT, nftContract;
+  let factoryOwner, addr1, addr2, addr3, NFT, nftContract, Auction, nftAuction;
   beforeEach(async () => {
-    [factoryOwner, addr1, addr2] = await ethers.getSigners();
+    [factoryOwner, addr1, addr2, addr3] = await ethers.getSigners();
     NFT = await ethers.getContractFactory("NFTFactory");
     nftContract = await NFT.deploy("1000000000000000000");
     await nftContract.deployed();
+    Auction = await ethers.getContractFactory("EnglishAuction");
+    nftAuction = await Auction.deploy(nftContract.address);
+    await nftAuction.deployed();
   });
   it("Should return balanceOf factoryOwner equal 2", async function () {
     let tokensCount = await nftContract.totalSupply();
@@ -102,7 +105,7 @@ describe("NFTFactory", function () {
       .to.emit(nftContract, "NewTokenURI")
       .withArgs(1, "http");
   });
-  it.only("Should return full url", async () => {
+  it("Should return full url", async () => {
     await nftContract.safeMint(
       addr1.address,
       "bafybeiff2q6s3gapx23zni3l6u7vyfdzjw5dbwjjbxdko5iiusca6k7kve",
@@ -111,5 +114,31 @@ describe("NFTFactory", function () {
     expect(await nftContract.tokenURI(1)).to.eq(
       "https://ipfs.io/ipfs/bafybeiff2q6s3gapx23zni3l6u7vyfdzjw5dbwjjbxdko5iiusca6k7kve"
     );
+  });
+  it.only("Should return null", async () => {
+    await nftContract
+      .connect(addr1)
+      .safeMint(addr1.address, "http", { value: ethers.utils.parseEther("1") });
+    const tokenId = await nftContract
+      .connect(addr1)
+      .tokenOfOwnerByIndex(addr1.address, 0);
+    const approve = await nftContract
+      .connect(addr1)
+      .approve(nftAuction.address, tokenId);
+    const myAuction = await nftAuction
+      .connect(addr1)
+      .startAuction(tokenId, 1, 60);
+    await nftAuction.connect(addr2).riseBid(0, { value: 10 });
+    await nftAuction.connect(addr3).riseBid(0, { value: 20 });
+    await network.provider.send("evm_increaseTime", [60]);
+    await nftAuction.connect(addr1).endAuction(0);
+    await nftAuction.connect(addr2).withdraw(0);
+    await nftAuction.connect(addr3).withdraw(0);
+    console.log(await nftAuction.connect(addr2).bids(addr2.address, 0));
+    const c = await nftContract.balanceOf(addr3.address);
+    const d = await nftContract.balanceOf(addr1.address);
+    console.log("c", d);
+
+    // expect(await nftContract.balanceOf(addr1.address)).to.eq(ethers.BigNumber.from("0"));
   });
 });

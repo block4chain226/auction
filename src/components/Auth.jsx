@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import AuthContext from "../context/AuthContext";
-import MyButton from "../Ui/MyButton/ConnectButton";
+import MyButton from "../Ui/MyButton/MyButton";
 // import { Navigate, useNavigate } from "react-router-dom";
 
 const Auth = () => {

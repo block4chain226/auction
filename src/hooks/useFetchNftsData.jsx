@@ -1,34 +1,20 @@
-import NftItem from "../components/NftItem/NftItem";
 import React, { useEffect, useState, useContext } from "react";
 import Web3StorageContext from "../context/Web3StorageContext";
-import AuthContext from "../context/AuthContext";
-import useFetchCIDs from "../hooks/useFetchCIDs";
-import useFetchNftsData from "../hooks/useFetchNftsData";
 
-const MyNft = () => {
-  const { makeStorageClient } = useContext(Web3StorageContext);
-  const { accounts } = useContext(AuthContext);
-  const [links, setLinks] = useState([]);
-  const client = makeStorageClient();
-  const { data, tokensId, loading, error } = useFetchCIDs(accounts[0]);
+const useFetchNftsData = (data) => {
+const client = makeStorageClient();
+const { makeStorageClient } = useContext(Web3StorageContext);
 
-  if (error) console.log("fetching error!");
-
-  useEffect(() => {
-    if (data && data.length > 0 && accounts.length > 0) {
-      getNfts();
-    }
-  }, [data]);
-
-  async function getNfts() {
+ async function getNfts() {
     ///////////// retrieve
     const allLinks = await getLinks(data);
     //////////// fetchData
     const fetchedData = await fetchData(allLinks);
-    setLinks(fetchedData);
+    // setLinks(fetchedData);
+    return fetchData;
   }
 
-  async function getLinks(arr) {
+ async function getLinks(arr) {
     const resolve = await Promise.all(
       arr.map(async (item) => {
         return client.get(item);
@@ -43,7 +29,7 @@ const MyNft = () => {
     });
   }
 
-  async function fetchData(arrr) {
+    async function fetchData(arrr) {
     let dataArray = [];
     let finalArray = [];
     console.log("arr", arrr);
@@ -66,30 +52,18 @@ const MyNft = () => {
     }
     return finalArray;
   }
+  
+  useEffect(()=>{
+    if(data){
+        getNfts();
+    }
+  },[])
 
-  return (
-    <>
-      <div
-        style={{
-          width: "100%",
-          padding: "10px",
-          display: "flex",
-          flexWrap: "wrap",
-          boxSizing: "border-box",
-          justifyContent: "center",
-          marginTop: "100px",
-        }}
-      >
-        {loading ? <p>Loading...</p> : ""}
-
-        {links && links !== undefined ? (
-          <NftItem links={links} tokensId={tokensId} />
-        ) : (
-          "You have not NFT's..."
-        )}
-      </div>
-    </>
-  );
+    return (
+        <div>
+            
+        </div>
+    );
 };
 
-export default MyNft;
+export default useFetchNftsData;
