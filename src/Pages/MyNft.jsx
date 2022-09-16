@@ -16,6 +16,8 @@ const MyNft = () => {
 
   useEffect(() => {
     if (data && data.length > 0 && accounts.length > 0) {
+      console.log("🚀 ~ file: MyNft.jsx ~ line 19 ~ useEffect ~ data", data);
+
       getNfts();
     }
   }, [data]);
@@ -25,6 +27,7 @@ const MyNft = () => {
     const allLinks = await getLinks(data);
     //////////// fetchData
     const fetchedData = await fetchData(allLinks);
+
     setLinks(fetchedData);
   }
 
@@ -64,6 +67,7 @@ const MyNft = () => {
       finalArray.push(dataArray);
       dataArray = [];
     }
+
     return finalArray;
   }
 

@@ -1,0 +1,30 @@
+.auction1 {
+  position: absolute;
+  width: 50%;
+  background-color: #ffffff;
+  display: flex;
+  background-color: rgb(118, 155, 186);
+}
+.image1 {
+  max-width: 30%;
+  margin-right: 10px;
+}
+.image1 img {
+  width: 100%;
+}
+.details1 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.price1 {
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.time1 {
+  text-align: left;
+  font-size: 20px;
+  text-align: justify;
+}

@@ -8,12 +8,26 @@ import CreateAuction from "../CreateAuction/CreateAuction";
 const NftItem = ({ links, tokensId }) => {
   const [index, setIndex] = useState("");
   const [createAuction, setCreateAuction] = useState(false);
+
   function details(e) {
     setIndex(e.currentTarget.attributes.getNamedItem("data-index").value);
   }
+
+  function startAuction(e) {
+    console.log("startAuction");
+    setIndex(e.currentTarget.attributes.getNamedItem("data-index").value);
+    setCreateAuction(true);
+  }
+
   function closeDetails() {
     setIndex("");
   }
+
+  function closeAuction() {
+    setIndex("");
+    setCreateAuction(false);
+  }
+
   return (
     <>
       {links &&
@@ -35,10 +49,17 @@ const NftItem = ({ links, tokensId }) => {
                 <img src={item[1]}></img>
               </div>
             </div>
-            <MyButton>Start Auction</MyButton>
+            <MyButton
+              data-index={index}
+              onClick={(e) => {
+                startAuction(e);
+              }}
+            >
+              Start Auction
+            </MyButton>
           </div>
         ))}
-      {index.length > 0 && !createAuction ? (
+      {index.length && !createAuction > 0 ? (
         <NftDetails
           arr={[links[index][1], links[index][0], links[index][2]]}
           closeDetails={closeDetails}
@@ -46,7 +67,11 @@ const NftItem = ({ links, tokensId }) => {
       ) : (
         ""
       )}
-      {createAuction && index.length < 1 ? <CreateAuction arr={links[index][1]} closeDetails={closeDetails} /> : ""}
+      {createAuction ? (
+        <CreateAuction index={links[index][1]} closeAuction={closeAuction} />
+      ) : (
+        ""
+      )}
     </>
   );
 };

@@ -2,19 +2,20 @@ import React, { useEffect, useState, useContext } from "react";
 import Web3StorageContext from "../context/Web3StorageContext";
 
 const useFetchNftsData = (data) => {
-const client = makeStorageClient();
-const { makeStorageClient } = useContext(Web3StorageContext);
+  const { makeStorageClient } = useContext(Web3StorageContext);
+  const client = makeStorageClient();
+  const [fetchedData, setfetchedData] = useState([]);
 
- async function getNfts() {
+  async function getNfts() {
     ///////////// retrieve
     const allLinks = await getLinks(data);
     //////////// fetchData
     const fetchedData = await fetchData(allLinks);
     // setLinks(fetchedData);
-    return fetchData;
+    setfetchedData(fetchData);
   }
 
- async function getLinks(arr) {
+  async function getLinks(arr) {
     const resolve = await Promise.all(
       arr.map(async (item) => {
         return client.get(item);
@@ -29,7 +30,7 @@ const { makeStorageClient } = useContext(Web3StorageContext);
     });
   }
 
-    async function fetchData(arrr) {
+  async function fetchData(arrr) {
     let dataArray = [];
     let finalArray = [];
     console.log("arr", arrr);
@@ -52,18 +53,16 @@ const { makeStorageClient } = useContext(Web3StorageContext);
     }
     return finalArray;
   }
-  
-  useEffect(()=>{
-    if(data){
-        getNfts();
-    }
-  },[])
 
-    return (
-        <div>
-            
-        </div>
-    );
+  useEffect(() => {
+    if (data) {
+      getNfts();
+    } else {
+      console.log("No CIDs");
+    }
+  }, [data]);
+
+  return fetchedData;
 };
 
 export default useFetchNftsData;
