@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ProviderContext from "../context/ProviderContext";
 
 const useFetchCIDs = (accounts, tokenId = null) => {
-  const { contract } = useContext(ProviderContext);
+  const { nftContract } = useContext(ProviderContext);
   const [status, setStatus] = useState({
     loading: false,
     data: undefined,
@@ -16,13 +16,13 @@ const useFetchCIDs = (accounts, tokenId = null) => {
       let tokensURI = [];
       let tokensIdArray = [];
       setStatus({ loading: true });
-      const accountBalance = await contract.balanceOf(accounts);
+      const accountBalance = await nftContract.balanceOf(accounts);
 
       if (Number(accountBalance) !== 0) {
         for (let i = 0; i < accountBalance; i++) {
-          let tokenId = await contract.tokenOfOwnerByIndex(accounts, i);
+          let tokenId = await nftContract.tokenOfOwnerByIndex(accounts, i);
           tokensIdArray.push(Number(tokenId));
-          let tokenURI = await contract.tokenURI(tokenId);
+          let tokenURI = await nftContract.tokenURI(tokenId);
           tokenURI = tokenURI.slice(21);
           ////////////////////////////////////////////////////////////////////put just tokenURI
           tokensURI.push(tokenURI);
@@ -42,13 +42,13 @@ const useFetchCIDs = (accounts, tokenId = null) => {
       let tokensURI = [];
       let tokensIdArray = [];
       setStatus({ loading: true });
-      const accountBalance = await contract.balanceOf(accounts);
+      const accountBalance = await nftContract.balanceOf(accounts);
 
       if (Number(accountBalance) !== 0) {
         for (let i = 0; i < accountBalance; i++) {
-          let tokenId = await contract.tokenOfOwnerByIndex(accounts, i);
+          let tokenId = await nftContract.tokenOfOwnerByIndex(accounts, i);
           tokensIdArray.push(Number(tokenId));
-          let tokenURI = await contract.tokenURI(tokenId);
+          let tokenURI = await nftContract.tokenURI(tokenId);
           tokenURI = tokenURI.slice(21);
           ////////////////////////////////////////////////////////////////////put just tokenURI
           tokensURI.push(tokenURI);

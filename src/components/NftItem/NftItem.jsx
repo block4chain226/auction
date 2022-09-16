@@ -4,10 +4,12 @@ import NftDetails from "../NftDetails/NftDetails";
 import MyButton from "../../Ui/MyButton/MyButton";
 import cl from "./NftItem.module.css";
 import CreateAuction from "../CreateAuction/CreateAuction";
+import { useEffect } from "react";
 
-const NftItem = ({ links, tokensId }) => {
+const NftItem = ({ arr, links, tokensId }) => {
   const [index, setIndex] = useState("");
   const [createAuction, setCreateAuction] = useState(false);
+  const [tokenId, setTokenId] = useState("");
 
   function details(e) {
     setIndex(e.currentTarget.attributes.getNamedItem("data-index").value);
@@ -16,6 +18,8 @@ const NftItem = ({ links, tokensId }) => {
   function startAuction(e) {
     console.log("startAuction");
     setIndex(e.currentTarget.attributes.getNamedItem("data-index").value);
+    setTokenId(e.currentTarget.attributes.getNamedItem("data-id").value);
+
     setCreateAuction(true);
   }
 
@@ -27,17 +31,16 @@ const NftItem = ({ links, tokensId }) => {
     setIndex("");
     setCreateAuction(false);
   }
+  useEffect(() => {
+    console.log("tokid", tokensId);
+  }, [tokensId]);
 
   return (
     <>
       {links &&
         tokensId &&
         links.map((item, index) => (
-          <div
-            data-id={tokensId[index]}
-            key={tokensId[index]}
-            className={cl.col}
-          >
+          <div key={tokensId[index]} className={cl.col}>
             <div
               onClick={(e) => {
                 details(e);
@@ -50,6 +53,7 @@ const NftItem = ({ links, tokensId }) => {
               </div>
             </div>
             <MyButton
+              data-id={tokensId[index]}
               data-index={index}
               onClick={(e) => {
                 startAuction(e);
@@ -68,7 +72,11 @@ const NftItem = ({ links, tokensId }) => {
         ""
       )}
       {createAuction ? (
-        <CreateAuction index={links[index][1]} closeAuction={closeAuction} />
+        <CreateAuction
+          tokenId={tokenId}
+          arr={[links[index][1], links[index][0], links[index][2]]}
+          closeAuction={closeAuction}
+        />
       ) : (
         ""
       )}
