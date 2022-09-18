@@ -10,13 +10,13 @@ const MyAuctions = ({ auction }) => {
   const [time, setTime] = useState("");
   const titleRef = useRef();
   function getTimeLeft() {
-    const test = 1663522419295;
-    const endtime = auction.totalTime;
+    const test = 1663595990 * 1000;
+    const endtime = auction.totalTime * 1000;
     const currentTime = new Date().getTime();
-    const leftTime = test - currentTime;
+    const leftTime = endtime - currentTime;
     console.log(
       "🚀 ~ file: MyAuctions.jsx ~ line 8 ~ timer ~ endtime",
-      new Date().getTime()
+      endtime
     );
 
     leftTime > 0 ? setTime(leftTime) : setTime(0);
@@ -39,6 +39,7 @@ const MyAuctions = ({ auction }) => {
         <div className={cl.item}>
           <div className={cl.image}>
             <img src={auction.image}></img>
+            <p>{auction.totalTime}</p>
           </div>
           <div className={cl.info}>
             <div className={cl.title}>{auction.title}</div>

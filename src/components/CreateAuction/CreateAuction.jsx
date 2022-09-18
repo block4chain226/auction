@@ -17,7 +17,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
         auctionContract.address,
         tokenId
       );
-      debugger;
+
       await approve.wait();
       const seconds = getSeconds();
       const newAuction = await auctionContract.startAuction(
@@ -41,8 +41,11 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   }
   function getSeconds() {
     // const difference = date.getTime() - new Date().getTime();
-    console.log("seconds:", (endDate.getTime() - new Date().getTime()) / 1000);
-    return (endDate.getTime() - new Date().getTime()) / 1000;
+    console.log(
+      "seconds:",
+      Math.floor((endDate.getTime() - new Date().getTime()) / 1000)
+    );
+    return Math.floor((endDate.getTime() - new Date().getTime()) / 100);
   }
   useEffect(() => {
     // getAuction();
