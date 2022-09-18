@@ -8,11 +8,13 @@ const useFetchNftsData = (data) => {
 
   async function getNfts() {
     ///////////// retrieve
+
     const allLinks = await getLinks(data);
     //////////// fetchData
     const fetchedData = await fetchData(allLinks);
     // setLinks(fetchedData);
-    setfetchedData(fetchData);
+    // console.log("fetched-data", fetchedData);
+    setfetchedData(fetchedData);
   }
 
   async function getLinks(arr) {

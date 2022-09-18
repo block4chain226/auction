@@ -1,0 +1,9 @@
+.style {
+  background-color: #23cfaa;
+}
+
+.style:hover {
+  background-color: #07c098;
+  color: #ffffff;
+}
+/*# sourceMappingURL=MyButton.module.css.map */

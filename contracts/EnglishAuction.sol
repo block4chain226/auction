@@ -26,9 +26,9 @@ contract EnglishAuction{
         }
 
         Auction[] public auctions;
-        mapping(address=>mapping(uint=>Auction)) public auctionsOwners;
+        mapping(address=>mapping(uint=>Auction)) private auctionsOwners;
         //how much active auctions owner has
-        mapping(address=>uint) public ownerActiveAuctionsCount;
+        mapping(address=>uint) private ownerAuctionsCount;
         //bidder=>auctionId=>bidd
         mapping(address=>mapping(uint=>uint)) public bids;
 
@@ -54,7 +54,7 @@ contract EnglishAuction{
             auctions.push(auction);
             nft.transferFrom(auction.owner, address(this), auction.nftId);
             //?
-            ownerActiveAuctionsCount[auction.owner]++;
+            ownerAuctionsCount[auction.owner]++;
             auctionsOwners[auction.owner][auctions.length - 1] = auction;
         }
         function riseBid(uint auctionId) external payable{
@@ -75,7 +75,7 @@ contract EnglishAuction{
             require(block.timestamp >= auction.totalTime, "the auction has still not over");
             auction.isEnd = true;
             //?
-            ownerActiveAuctionsCount[auction.owner]--;
+            ownerAuctionsCount[auction.owner]--;
              if(auction.highestBidder != address(0) && auction.highestBidder != auction.owner){
                 nft.transferFrom(address(this), auction.highestBidder, auction.nftId);
                 payable(auction.owner).transfer(auction.highestPrice);
@@ -97,17 +97,12 @@ contract EnglishAuction{
             payable(msg.sender).transfer(moneyToReturn);
         }
 
-        function balanceOfContract() public view returns(uint){
-            return address(this).balance;
-        }
-        function balanceOf(address account) public view returns(uint){
-            return account.balance;
-        }
+       function getAccountAuctionByIndex(address account, uint index) public view returns(Auction memory){
+        return auctionsOwners[account][index];
+       }
 
-
-
-
-
-
+       function getOwnerAuctionsCount() public view returns(uint){
+        return ownerAuctionsCount[msg.sender];
+       }
 
 }

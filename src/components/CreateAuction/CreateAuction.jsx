@@ -17,11 +17,13 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
         auctionContract.address,
         tokenId
       );
+      debugger;
       await approve.wait();
+      const seconds = getSeconds();
       const newAuction = await auctionContract.startAuction(
         tokenId,
         startPrice,
-        getSeconds(endDate)
+        seconds
       );
       await newAuction.wait();
       console.log("newAuction", newAuction);
@@ -29,6 +31,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
       console.log("you have not auction and nft providers");
     }
   }
+
   async function getAuction(id) {
     const auction = await auctionContract.auctions(0);
     console.log(
@@ -36,12 +39,13 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
       auction
     );
   }
-  function getSeconds(endDate) {
+  function getSeconds() {
     // const difference = date.getTime() - new Date().getTime();
     console.log("seconds:", (endDate.getTime() - new Date().getTime()) / 1000);
     return (endDate.getTime() - new Date().getTime()) / 1000;
   }
   useEffect(() => {
+    // getAuction();
     console.log("tokenId", tokenId);
   }, []);
 
@@ -72,7 +76,6 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
                 <DateTimePicker onChange={onChange} value={endDate} />
 
                 <MyButton onClick={startAuction}>Start Auction</MyButton>
-                <MyButton onClick={getSeconds}>Get Auction</MyButton>
               </div>
             </div>
             <div onClick={() => closeAuction()} className="cross"></div>

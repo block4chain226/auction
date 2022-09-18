@@ -32,7 +32,7 @@ const NftItem = ({ arr, links, tokensId }) => {
     setCreateAuction(false);
   }
   useEffect(() => {
-    console.log("tokid", tokensId);
+    console.log("tokensId", tokensId);
   }, [tokensId]);
 
   return (
