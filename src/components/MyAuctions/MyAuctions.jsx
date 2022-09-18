@@ -8,18 +8,19 @@ const MyAuctions = ({ auction }) => {
       <div className={cl.col}>
         <div className={cl.item}>
           <div className={cl.image}>
-            <img src={auction.url}></img>
+            <img src={auction.image}></img>
+          </div>
+          <div className={cl.info}>
+            <div className={cl.title}>{auction.title}</div>
+            <div className={cl.text}>{auction.text}</div>
+            <div className={cl.leftTime}></div>
+            <div className={cl.timePassed}></div>
+            <div className={cl.bidder}></div>
+            <div className={cl.stop}>
+              <MyButton>Stop Auction</MyButton>
+            </div>
           </div>
         </div>
-        <div className={cl.info}>
-          <div className={cl.title}></div>
-          <div className={cl.text}></div>
-          <div className={cl.leftTime}></div>
-          <div className={cl.timePassed}></div>
-          <div className={cl.bidder}></div>
-          <div className={cl.stop}></div>
-        </div>
-        <MyButton>Start Auction</MyButton>
       </div>
     </>
   );
