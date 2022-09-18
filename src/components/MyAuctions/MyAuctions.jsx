@@ -4,20 +4,30 @@ import { useEffect } from "react";
 import MyButton from "../../Ui/MyButton/MyButton";
 import Countdown from "react-countdown";
 import cl from "./MyAuctions.module.css";
+import { useRef } from "react";
 
 const MyAuctions = ({ auction }) => {
   const [time, setTime] = useState("");
-
+  const titleRef = useRef();
   function getTimeLeft() {
-    const test = 1663513695106;
+    const test = 1663522419295;
     const endtime = auction.totalTime;
-    const currentTime = new Date();
+    const currentTime = new Date().getTime();
     const leftTime = test - currentTime;
     console.log(
       "🚀 ~ file: MyAuctions.jsx ~ line 8 ~ timer ~ endtime",
       new Date().getTime()
     );
+
     leftTime > 0 ? setTime(leftTime) : setTime(0);
+  }
+
+  async function endAuction(e) {
+    // console.log(e.target.attributes.getNamedItem("data-auctionId").value);
+    // const ele = document.querySelector(".MyAuctions_leftTime__2gozI");
+    // console.log(ele.attributes.getNamedItem("data-auctionId").value);
+
+    console.log(titleRef.current.props.databoard);
   }
 
   useEffect(() => {
@@ -33,10 +43,14 @@ const MyAuctions = ({ auction }) => {
           <div className={cl.info}>
             <div className={cl.title}>{auction.title}</div>
             <div className={cl.text}>{auction.text}</div>
-            <div className={cl.leftTime}>
+            <div data-auctionId={auction.auctionId} className={cl.leftTime}>
               {time > 0 ? (
                 <Countdown
-                  onComplete={() => setTime(0)}
+                  databoard={Number(auction.auctionId)}
+                  ref={titleRef}
+                  onComplete={(e) => {
+                    endAuction(e);
+                  }}
                   date={Date.now() + time}
                 />
               ) : (
@@ -50,7 +64,7 @@ const MyAuctions = ({ auction }) => {
                 <input name="bidder" />
               </label>
             </div>
-            <div className={cl.stop}>
+            <div data-auctionId={auction.auctionId} className={cl.stop}>
               <MyButton>Stop Auction</MyButton>
             </div>
           </div>
