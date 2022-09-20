@@ -90,7 +90,7 @@ const MyAuctions = ({ auction }) => {
           <div className={cl.info}>
             <div className={cl.title}>{auction.title}</div>
             <div className={cl.text}>{auction.text}</div>
-            <div data-auctionId={auction.auctionId} className={cl.leftTime}>
+            <div className={cl.leftTime}>
               {time > 0 && !isWithdraw ? (
                 <Countdown
                   databoard={Number(auction.auctionId)}
@@ -106,12 +106,12 @@ const MyAuctions = ({ auction }) => {
             </div>
             <div className={cl.timePassed}></div>
             <div className={cl.bidder}>
-              <label for="bidder">
+              <label>
                 bidder
                 <input name="bidder" />
               </label>
             </div>
-            <div data-auctionId={auction.auctionId} className={cl.stop}>
+            <div className={cl.stop}>
               <button
                 onClick={(e) => {
                   getAuctions(e);
