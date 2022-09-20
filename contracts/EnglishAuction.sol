@@ -26,7 +26,7 @@ contract EnglishAuction{
         }
 
         Auction[] public auctions;
-        mapping(address=>mapping(uint=>Auction)) private auctionsOwners;
+        mapping(address=>mapping(uint=>Auction)) public auctionsOwners;
         //how much active auctions owner has
         mapping(address=>uint) private ownerAuctionsCount;
         //bidder=>auctionId=>bidd
@@ -56,8 +56,10 @@ contract EnglishAuction{
             auctions.push(auction);
             nft.transferFrom(auction.owner, address(this), auction.nftId);
             //?
+            auctionsOwners[auction.owner][ownerAuctionsCount[auction.owner]] = auction;
             ownerAuctionsCount[auction.owner]++;
-            auctionsOwners[auction.owner][auctions.length - 1] = auction;
+            /////////////////////////////////////////////mistake!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // auctionsOwners[auction.owner][auctions.length] = auction;
         }
         function riseBid(uint auctionId) external payable{
              Auction storage auction = auctions[auctionId];
@@ -83,7 +85,7 @@ contract EnglishAuction{
             require(block.timestamp >= auction.totalTime, "the auction has still not over");
             auction.isEnd = true;
             //?
-            ownerAuctionsCount[auction.owner]--;
+            // ownerAuctionsCount[auction.owner]--;
              if(auction.highestBidder != address(0) && auction.highestBidder != auction.owner){
                 nft.transferFrom(address(this), auction.highestBidder, auction.nftId);
                 payable(auction.owner).transfer(auction.highestPrice);

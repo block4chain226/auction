@@ -33,10 +33,10 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   }
 
   async function getAuction(id) {
-    const auction = await auctionContract.auctions(0);
+    const approve = await nftContract.ownerOf(3);
     console.log(
-      "🚀 ~ file: CreateAuction.jsx ~ line 28 ~ getAuction ~ auction",
-      auction
+      "🚀 ~ file: CreateAuction.jsx ~ line 37 ~ getAuction ~ approve",
+      approve
     );
   }
   function getSeconds() {
@@ -45,7 +45,8 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
       "seconds:",
       Math.floor((endDate.getTime() - new Date().getTime()) / 1000)
     );
-    return Math.floor((endDate.getTime() - new Date().getTime()) / 100);
+    // return Math.floor((endDate.getTime() - new Date().getTime()) / 100);
+    return endDate.getTime() / 1000;
   }
   useEffect(() => {
     // getAuction();
@@ -77,7 +78,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
               </div>
               <div className={cl.time}>
                 <DateTimePicker onChange={onChange} value={endDate} />
-
+                <button onClick={getAuction}>test</button>
                 <MyButton onClick={startAuction}>Start Auction</MyButton>
               </div>
             </div>

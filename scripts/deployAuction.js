@@ -3,7 +3,7 @@ const { ethers } = require("hardhat");
 async function main() {
   const EnglishAuction = await ethers.getContractFactory("EnglishAuction");
   const EnglishAuctionContract = await EnglishAuction.deploy(
-    "0xe36bCA52B61c1912b8B80B0E7bD363AD9db00f48"
+    "0xAD4CdFd07a60aC5d9cCC3E636Ed955355fed7596"
   );
   await EnglishAuctionContract.deployed();
   console.log(

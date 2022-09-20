@@ -140,7 +140,7 @@ describe("NFTFactory", function () {
 
     // expect(await nftContract.balanceOf(addr1.address)).to.eq(ethers.BigNumber.from("0"));
   });
-  it.only("nft should return to add1 because no one not bidded", async () => {
+  it("nft should return to add1 because no one not bidded", async () => {
     await nftContract.connect(addr1).safeMint(addr1.address, "http", {
       value: ethers.utils.parseEther("1"),
     });
@@ -166,4 +166,66 @@ describe("NFTFactory", function () {
       tokenOwner1
     );
   });
+  it.only("should return 3 auctions using getAccountAuctionByIndex", async () => {
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    const tokenId1 = await nftContract
+      .connect(addr1)
+      .tokenOfOwnerByIndex(addr1.address, 0);
+
+    const approve = await nftContract
+      .connect(addr1)
+      .approve(nftAuction.address, tokenId1);
+
+    const myAuction = await nftAuction
+      .connect(addr1)
+      .startAuction(tokenId1, 1, 60);
+    console.log(await nftContract.ownerOf(1));
+    const endAuction = await nftAuction.endAuction(0);
+    const ownerofReturnedNFT = await nftContract.ownerOf(1);
+    console.log(
+      "🚀 ~ file: sample-test.js ~ line 185 ~ it.only ~ ownerofReturnedNFT",
+      ownerofReturnedNFT
+    );
+
+    /////////////////////////////////////////
+    await nftContract.connect(addr2).safeMint(addr2.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    const tokenId2 = await nftContract
+      .connect(addr2)
+      .tokenOfOwnerByIndex(addr2.address, 0);
+
+    const approve2 = await nftContract
+      .connect(addr2)
+      .approve(nftAuction.address, tokenId2);
+
+    const myAuction2 = await nftAuction
+      .connect(addr2)
+      .startAuction(tokenId2, 1, 60);
+    console.log(await nftContract.ownerOf(2));
+    const endAuction2 = await nftAuction.endAuction(1);
+    /////////////////////////////////////
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    const tokenId3 = await nftContract
+      .connect(addr1)
+      .tokenOfOwnerByIndex(addr1.address, 1);
+
+    const approve3 = await nftContract
+      .connect(addr1)
+      .approve(nftAuction.address, tokenId3);
+
+    const myAuction3 = await nftAuction
+      .connect(addr1)
+      .startAuction(tokenId3, 1, 60);
+    console.log(await nftContract.ownerOf(3));
+    const endAuction3 = await nftAuction.endAuction(2);
+    const auction = await nftAuction.getAccountAuctionByIndex(addr2.address,0);
+  console.log("🚀 ~ file: sample-test.js ~ line 229 ~ auction", auction)
+  });
+  ////////////////////
+  
 });

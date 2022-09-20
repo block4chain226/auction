@@ -6,15 +6,15 @@ async function main() {
   await NFTFactoryContract.deployed();
   console.log("NFTFactoryContract deployed to: ", NFTFactoryContract.address);
   /////
-  const EnglishAuction = await ethers.getContractFactory("EnglishAuction");
-  const EnglishAuctionContract = await EnglishAuction.deploy(
-    NFTFactoryContract.address
-  );
-  await EnglishAuctionContract.deployed();
-  console.log(
-    "EnglishAuctionContract deployed to: ",
-    EnglishAuctionContract.address
-  );
+  // const EnglishAuction = await ethers.getContractFactory("EnglishAuction");
+  // const EnglishAuctionContract = await EnglishAuction.deploy(
+  //   NFTFactoryContract.address
+  // );
+  // await EnglishAuctionContract.deployed();
+  // console.log(
+  //   "EnglishAuctionContract deployed to: ",
+  //   EnglishAuctionContract.address
+  // );
 }
 
 main()

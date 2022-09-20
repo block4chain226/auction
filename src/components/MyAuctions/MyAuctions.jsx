@@ -18,15 +18,15 @@ const MyAuctions = ({ auction }) => {
 
   function getTimeLeft() {
     const test = 1663522419295;
-    const endtime = auction.totalTime;
+    const endtime = auction.totalTime * 1000;
     const currentTime = new Date().getTime();
-    const leftTime = test - currentTime;
+    const leftTime = endtime - currentTime;
     console.log(
       "🚀 ~ file: MyAuctions.jsx ~ line 8 ~ timer ~ endtime",
-      new Date().getTime()
+      leftTime > 0
     );
 
-    leftTime > 0 ? setTime(leftTime + 1000) : setTime(0);
+    leftTime > 0 ? setTime(leftTime + 10000) : setTime(0);
   }
 
   async function endAuction(e) {
