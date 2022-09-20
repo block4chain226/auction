@@ -10,6 +10,10 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   const [endDate, onChange] = useState(new Date());
   const [startPrice, setStartPrice] = useState("");
 
+  function getRightId() {
+    console.log("getRightId", tokenId);
+  }
+
   async function startAuction() {
     if (auctionContract && nftContract && endDate && startPrice) {
       console.log("tokenId", tokenId);
@@ -33,10 +37,15 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   }
 
   async function getAuction(id) {
-    const auction = await auctionContract.auctions(6);
+    // const auction = await auctionContract.auctions(6);
+    // console.log(
+    //   "🚀 ~ file: CreateAuction.jsx ~ line 28 ~ getAuction ~ auction",
+    //   auction
+    // );
+    const app = await nftContract.ownerOf(36);
     console.log(
-      "🚀 ~ file: CreateAuction.jsx ~ line 28 ~ getAuction ~ auction",
-      auction
+      "🚀 ~ file: CreateAuction.jsx ~ line 25 ~ startAuction ~ app",
+      app
     );
   }
   function getSeconds() {
@@ -76,7 +85,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
               </div>
               <div className={cl.time}>
                 <DateTimePicker onChange={onChange} value={endDate} />
-                <button onClick={getSeconds}>getSeconds</button>
+                <button onClick={getAuction}>getRightId</button>
                 <MyButton onClick={startAuction}>Start Auction</MyButton>
               </div>
             </div>

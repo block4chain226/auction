@@ -15,7 +15,6 @@ const MyAuctions = ({ auction }) => {
   const [time, setTime] = useState("");
   const [isWithdraw, setIsWithdraw] = useState(false);
   const titleRef = useRef();
-  const titleRef1 = useRef();
 
   function getTimeLeft() {
     const test = 1663595990 * 1000;
@@ -32,21 +31,16 @@ const MyAuctions = ({ auction }) => {
 
   async function endAuction(e) {
     try {
-      //////////////////////////////////////////////////////////////////////////////////////maybe not tight Id
       const auctionId = titleRef.current.props.databoard;
-      console.log(
-        "🚀 ~ file: MyAuctions.jsx ~ line 36 ~ endAuction ~ auctionId",
-        auctionId
-      );
-      console.log(
-        "🚀 ~ file: MyAuctions.jsx ~ line 36 ~ endAuction ~ auctionId",
-        auctionId
-      );
       const timestamp = await auctionContract.time();
       const endedAuction = await auctionContract.endAuction(auctionId);
-      await auctionContract.on("EndAuction", (endTime) => {
-        console.log("timeStamp:", endTime);
-      });
+      // console.log(
+      //   "🚀 ~ file: MyAuctions.jsx ~ line 38 ~ endAuction ~ endedAuction",
+      //   endedAuction
+      // );
+      // await auctionContract.on("EndAuction", (endTime) => {
+      //   console.log("timeStamp:", endTime);
+      // });
 
       if (auction.highestBidder !== accounts[0]) {
         const myBids = await auctionContract.bids(accounts, auctionId);
@@ -84,6 +78,7 @@ const MyAuctions = ({ auction }) => {
 
   useEffect(() => {
     getTimeLeft();
+    console.log(auction);
   }, [auction]);
   return (
     <>

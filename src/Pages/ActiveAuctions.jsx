@@ -21,11 +21,13 @@ const ActiveAuctions = () => {
   }, [nftData, auctions]);
   useEffect(() => {
     if (fetchedData && accounts.length) {
+      console.log("fetchedData", fetchedData);
       addMetaDataToAuctions();
     }
   }, [fetchedData]);
 
   function addMetaDataToAuctions() {
+    console.log("newAuctionsBefore: ", auctions);
     const newAuctions = auctions.map((item, index) => {
       return Object.assign({}, item, {
         title: fetchedData[index][0],

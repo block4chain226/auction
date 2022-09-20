@@ -4,7 +4,6 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import ProviderContext from "../context/ProviderContext";
 
-
 const useFetchAuctions = (account, auctionId = null) => {
   const { nftContract, auctionContract } = useContext(ProviderContext);
   const [status, setStatus] = useState([]);
@@ -26,6 +25,7 @@ const useFetchAuctions = (account, auctionId = null) => {
         );
         auctions.push(auction);
       }
+      ///////////////////////////////////////////////////////////////////////////////////////////////ok
       console.log(
         "🚀 ~ file: useFetchAuctions.jsx ~ line 23 ~ getAllAccountAuctions ~ auctions",
         auctions
