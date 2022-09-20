@@ -31,6 +31,7 @@ contract EnglishAuction{
         mapping(address=>uint) private ownerAuctionsCount;
         //bidder=>auctionId=>bidd
         mapping(address=>mapping(uint=>uint)) public bids;
+        event EndAuction(uint endTime);
 
         constructor( address _nft){
           contractOwner = payable(msg.sender);
@@ -45,7 +46,8 @@ contract EnglishAuction{
                 nftId: _nftId,
                 startPrice: _startPrice,
                 highestPrice: _startPrice,
-                totalTime: uint32(block.timestamp + _totalTime),
+                // totalTime: uint32(block.timestamp + _totalTime),
+                totalTime: uint32(_totalTime),
                 startTime: block.timestamp,
                 highestBidder: msg.sender,
                 isStarted: true,
@@ -68,10 +70,16 @@ contract EnglishAuction{
                 bids[auction.highestBidder][auctionId] += msg.value;
              } 
         }
+
+        function time() public {
+            emit EndAuction(block.timestamp);
+        }
+
         function endAuction(uint auctionId) external{
             Auction storage auction = auctions[auctionId];
+            
             require(auction.isStarted && !auction.isEnd, "auction has not started yet or has already ended");
-            require(auction.highestBidder != address(0), "no one has not raised up bids");
+            // require(auction.highestBidder != address(0), "no one has not raised up bids");
             require(block.timestamp >= auction.totalTime, "the auction has still not over");
             auction.isEnd = true;
             //?

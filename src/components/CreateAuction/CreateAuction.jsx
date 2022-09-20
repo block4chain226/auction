@@ -33,7 +33,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   }
 
   async function getAuction(id) {
-    const auction = await auctionContract.auctions(0);
+    const auction = await auctionContract.auctions(6);
     console.log(
       "🚀 ~ file: CreateAuction.jsx ~ line 28 ~ getAuction ~ auction",
       auction
@@ -41,17 +41,16 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   }
   function getSeconds() {
     // const difference = date.getTime() - new Date().getTime();
-    console.log(
-      "seconds:",
-      Math.floor((endDate.getTime() - new Date().getTime()) / 1000)
-    );
-    return Math.floor((endDate.getTime() - new Date().getTime()) / 100);
+    console.log("seconds:", endDate.getTime());
+    // return Math.floor((endDate.getTime() - new Date().getTime()) / 1000);
+    return endDate.getTime() / 1000;
   }
   useEffect(() => {
     // getAuction();
     console.log("tokenId", tokenId);
+    console.log("auctionContract", auctionContract.address);
   }, []);
-
+  console.log("endDate", endDate);
   return (
     <>
       {
@@ -77,7 +76,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
               </div>
               <div className={cl.time}>
                 <DateTimePicker onChange={onChange} value={endDate} />
-
+                <button onClick={getSeconds}>getSeconds</button>
                 <MyButton onClick={startAuction}>Start Auction</MyButton>
               </div>
             </div>

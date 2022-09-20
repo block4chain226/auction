@@ -23,6 +23,7 @@ const useFetchNftsData = (data) => {
         return client.get(item);
       })
     );
+
     const next = resolve.filter((i) => i.ok);
     const files = await Promise.all(next.map(async (item) => item.files()));
     return files.map((file) => {

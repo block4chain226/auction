@@ -115,7 +115,7 @@ describe("NFTFactory", function () {
       "https://ipfs.io/ipfs/bafybeiff2q6s3gapx23zni3l6u7vyfdzjw5dbwjjbxdko5iiusca6k7kve"
     );
   });
-  it.only("Should return null", async () => {
+  it("Should return null", async () => {
     await nftContract
       .connect(addr1)
       .safeMint(addr1.address, "http", { value: ethers.utils.parseEther("1") });
@@ -125,9 +125,8 @@ describe("NFTFactory", function () {
     const approve = await nftContract
       .connect(addr1)
       .approve(nftAuction.address, tokenId);
-    const myAuction = await nftAuction
-      .connect(addr1)
-      .startAuction(tokenId, 1, 60);
+    const myAuction = await nftAuction.connect(addr1).startAuction(tokenId, 1);
+
     await nftAuction.connect(addr2).riseBid(0, { value: 10 });
     await nftAuction.connect(addr3).riseBid(0, { value: 20 });
     await network.provider.send("evm_increaseTime", [60]);
@@ -140,5 +139,31 @@ describe("NFTFactory", function () {
     console.log("c", d);
 
     // expect(await nftContract.balanceOf(addr1.address)).to.eq(ethers.BigNumber.from("0"));
+  });
+  it.only("nft should return to add1 because no one not bidded", async () => {
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    const tokenId = await nftContract
+      .connect(addr1)
+      .tokenOfOwnerByIndex(addr1.address, 0);
+    const approve = await nftContract
+      .connect(addr1)
+      .approve(nftAuction.address, tokenId);
+    const myAuction = await nftAuction
+      .connect(addr1)
+      .startAuction(tokenId, 1, 60);
+    const tokenOwner = await nftContract.balanceOf(addr1.address);
+    console.log(
+      "🚀 ~ file: sample-test.js ~ line 154 ~ it.only ~ tokenOwner",
+      tokenOwner
+    );
+    await network.provider.send("evm_increaseTime", [60]);
+    await nftAuction.connect(addr1).endAuction(0);
+    const tokenOwner1 = await nftContract.balanceOf(addr1.address);
+    console.log(
+      "🚀 ~ file: sample-test.js ~ line 154 ~ it.only ~ tokenOwner",
+      tokenOwner1
+    );
   });
 });

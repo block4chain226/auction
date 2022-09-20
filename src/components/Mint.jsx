@@ -11,7 +11,7 @@ const Mint = () => {
   const [text, setText] = useState("");
   const [file, setFile] = useState([]);
   const { makeStorageClient } = useContext(Web3StorageContext);
-  const { contract } = useContext(ProviderContext);
+  const { nftContract } = useContext(ProviderContext);
   const { accounts } = useContext(AuthContext);
 
   async function MintNFT(e) {
@@ -19,14 +19,14 @@ const Mint = () => {
       //get files url
       let url = await uploadFiles(e);
       //minting
-      const mint = await contract.safeMint(accounts[0], url, {
+      const mint = await nftContract.safeMint(accounts[0], url, {
         value: ethers.utils.parseEther("0.0001"),
       });
       //event logs
-      await contract.on("Transfer", (from, to, _tokenId) => {
+      await nftContract.on("Transfer", (from, to, _tokenId) => {
         console.log("Transfer:", from, to, Number(_tokenId));
       });
-      contract.on("NewTokenURI", (_owner, _tokenId, _newtokenUri) => {
+      nftContract.on("NewTokenURI", (_owner, _tokenId, _newtokenUri) => {
         console.log("NewTokenURI:", _owner, Number(_tokenId), _newtokenUri);
       });
     } else {
