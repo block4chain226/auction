@@ -23,16 +23,13 @@ const useFetchAuctions = (account, auctionId = null) => {
           account,
           i
         );
-        auctions.push(auction);
+        console.log("AUCTION", auction);
+        if (auction.isEnd === false) {
+          auctions.push(auction);
+        }
       }
       ///////////////////////////////////////////////////////////////////////////////////////////////ok
-      console.log(
-        "🚀 ~ file: useFetchAuctions.jsx ~ line 23 ~ getAllAccountAuctions ~ auctions",
-        auctions
-      );
-      // const timestamp = 1663429928;
-      // const date = new Date(timestamp * 1000);
-      // console.log("date", date);
+
       setStatus(auctions);
     } catch (err) {
       // setStatus({ error1: err });

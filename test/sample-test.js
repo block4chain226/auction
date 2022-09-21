@@ -166,7 +166,7 @@ describe("NFTFactory", function () {
       tokenOwner1
     );
   });
-  it.only("should return 3 auctions using getAccountAuctionByIndex", async () => {
+  it("should return 3 auctions using getAccountAuctionByIndex", async () => {
     await nftContract.connect(addr1).safeMint(addr1.address, "http", {
       value: ethers.utils.parseEther("1"),
     });
@@ -223,9 +223,31 @@ describe("NFTFactory", function () {
       .startAuction(tokenId3, 1, 60);
     console.log(await nftContract.ownerOf(3));
     const endAuction3 = await nftAuction.endAuction(2);
-    const auction = await nftAuction.getAccountAuctionByIndex(addr2.address,0);
-  console.log("🚀 ~ file: sample-test.js ~ line 229 ~ auction", auction)
+    const auction = await nftAuction.getAccountAuctionByIndex(addr2.address, 0);
+    console.log("🚀 ~ file: sample-test.js ~ line 229 ~ auction", auction);
   });
   ////////////////////
-  
+  it.only("after endAuction getAccountAuctionByIndex should return aauction with isEnd==true", async () => {
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    const tokenId1 = await nftContract
+      .connect(addr1)
+      .tokenOfOwnerByIndex(addr1.address, 0);
+
+    const approve = await nftContract
+      .connect(addr1)
+      .approve(nftAuction.address, tokenId1);
+
+    const myAuction = await nftAuction
+      .connect(addr1)
+      .startAuction(tokenId1, 1, 60);
+    console.log(await nftContract.ownerOf(1));
+    const endAuction = await nftAuction.endAuction(0);
+    const auction = await nftAuction.getAccountAuctionByIndex(addr1.address, 1);
+    console.log(
+      "🚀 ~ file: sample-test.js ~ line 248 ~ it.only ~ auction",
+      auction
+    );
+  });
 });

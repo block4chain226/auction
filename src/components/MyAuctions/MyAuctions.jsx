@@ -26,13 +26,13 @@ const MyAuctions = ({ auction }) => {
       leftTime > 0
     );
 
-    leftTime > 0 ? setTime(leftTime + 10000) : setTime(0);
+    leftTime > 0 ? setTime(leftTime + 12000) : setTime(0);
   }
 
   async function endAuction(e) {
     try {
       const auctionId = titleRef.current.props.databoard;
-      const timestamp = await auctionContract.time();
+      // const timestamp = await auctionContract.time();
       const endedAuction = await auctionContract.endAuction(auctionId);
       // console.log(
       //   "🚀 ~ file: MyAuctions.jsx ~ line 38 ~ endAuction ~ endedAuction",

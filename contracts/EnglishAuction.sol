@@ -41,6 +41,7 @@ contract EnglishAuction{
         function startAuction(uint _nftId, uint _startPrice, uint32 _totalTime) external{
             
             Auction memory auction =  Auction({
+                //?? length+1
                 auctionId: auctions.length,
                 owner: msg.sender,
                 nftId: _nftId,
@@ -73,9 +74,9 @@ contract EnglishAuction{
              } 
         }
 
-        function time() public {
-            emit EndAuction(block.timestamp);
-        }
+        // function time() public {
+        //     emit EndAuction(block.timestamp);
+        // }
 
         function endAuction(uint auctionId) external{
             Auction storage auction = auctions[auctionId];
@@ -84,6 +85,7 @@ contract EnglishAuction{
             // require(auction.highestBidder != address(0), "no one has not raised up bids");
             require(block.timestamp >= auction.totalTime, "the auction has still not over");
             auction.isEnd = true;
+            auctionsOwners[auction.owner][ownerAuctionsCount[auction.owner]-1] = auction;
             //?
             // ownerAuctionsCount[auction.owner]--;
              if(auction.highestBidder != address(0) && auction.highestBidder != auction.owner){
