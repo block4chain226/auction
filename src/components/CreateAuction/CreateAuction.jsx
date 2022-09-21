@@ -45,6 +45,7 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
       "seconds:",
       Math.floor((endDate.getTime() - new Date().getTime()) / 1000)
     );
+
     // return Math.floor((endDate.getTime() - new Date().getTime()) / 100);
     return endDate.getTime() / 1000;
   }

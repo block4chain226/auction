@@ -231,23 +231,35 @@ describe("NFTFactory", function () {
     await nftContract.connect(addr1).safeMint(addr1.address, "http", {
       value: ethers.utils.parseEther("1"),
     });
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
     const tokenId1 = await nftContract
       .connect(addr1)
       .tokenOfOwnerByIndex(addr1.address, 0);
 
-    const approve = await nftContract
+    const approveForAll = await nftContract
       .connect(addr1)
-      .approve(nftAuction.address, tokenId1);
+      .setApprovalForAll(nftAuction.address, true);
 
-    const myAuction = await nftAuction
-      .connect(addr1)
-      .startAuction(tokenId1, 1, 60);
-    console.log(await nftContract.ownerOf(1));
-    const endAuction = await nftAuction.endAuction(0);
-    const auction = await nftAuction.getAccountAuctionByIndex(addr1.address, 1);
+    await nftAuction.connect(addr1).startAuction(1, 1, 60);
+    await nftAuction.connect(addr1).startAuction(2, 1, 60);
+    await nftAuction.connect(addr1).startAuction(3, 1, 60);
+    await nftAuction.connect(addr1).startAuction(4, 1, 60);
+    await nftAuction.endAuction(0);
+    await nftAuction.endAuction(1);
+    await nftAuction.endAuction(2);
+    await nftAuction.endAuction(3);
+    const auctionsAll = await nftAuction.getAllAuctions();
     console.log(
-      "🚀 ~ file: sample-test.js ~ line 248 ~ it.only ~ auction",
-      auction
+      "🚀 ~ file: sample-test.js ~ line 260 ~ it.only ~ auctionsAll",
+      auctionsAll
     );
   });
 });

@@ -116,5 +116,8 @@ contract EnglishAuction{
        function getOwnerAuctionsCount() public view returns(uint){
         return ownerAuctionsCount[msg.sender];
        }
+       function getAllAuctions() public view returns(Auction[] memory){
+        return auctions;
+       }
 
 }

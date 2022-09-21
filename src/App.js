@@ -19,7 +19,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Layout />}>
                   <Route index element={<Main />} />
-                  <Route index element={<Home />} />
+                  <Route path="home" element={<Home />} />
                   <Route path="activeauctions" element={<ActiveAuctions />} />
                   <Route path="mynft" element={<MyNft />} />
                 </Route>

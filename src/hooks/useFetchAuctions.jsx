@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import ProviderContext from "../context/ProviderContext";
 
-const useFetchAuctions = (account, auctionId = null) => {
+const useFetchAuctions = (account = undefined) => {
   const { nftContract, auctionContract } = useContext(ProviderContext);
   const [status, setStatus] = useState([]);
 
@@ -37,9 +37,26 @@ const useFetchAuctions = (account, auctionId = null) => {
     }
   }
 
+  async function getAllActiveAuctions() {
+    try {
+      const auctions = await auctionContract.getAllAuctions();
+      const activeAuctions = auctions.filter((item) => item.isEnd);
+
+      setStatus(activeAuctions);
+    } catch (err) {
+      console.log("error: ", err);
+    }
+  }
+
   useEffect(() => {
-    if (account && auctionId === null) {
+    if (account) {
       getAllAccountAuctions();
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (account === undefined) {
+      getAllActiveAuctions();
     }
   }, [account]);
 

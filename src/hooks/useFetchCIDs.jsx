@@ -64,6 +64,30 @@ const useFetchCIDs = (accounts, ids) => {
     }
   }
 
+  async function getAllAuctionsTokensURI() {
+    try {
+      let tokensURI = [];
+      setStatus({ loading: true });
+      console.log("ids", ids);
+
+      //auction->tokenId->tokenURI->push title/text/url
+      if (ids.length > 0) {
+        for (let i = 0; i < ids.length; i++) {
+          let tokenURI = await nftContract.tokenURI(Number(ids[i].nftId));
+          tokenURI = tokenURI.slice(21);
+          console.log("tokenURI", tokenURI);
+          tokensURI.push(tokenURI);
+        }
+        setStatus({ loading: false, nftData: tokensURI });
+      } else {
+        setStatus({ loading: false, error: "you have not tokens" });
+      }
+    } catch (err) {
+      setStatus({ loading: false, error: err.toString() });
+      console.log("err", err);
+    }
+  }
+
   useEffect(() => {
     if (accounts && ids === undefined) {
       getAllAccountTokensURIs();
@@ -75,6 +99,12 @@ const useFetchCIDs = (accounts, ids) => {
       second();
     }
   }, [accounts, ids]);
+
+  useEffect(() => {
+    if (accounts === undefined && ids.length) {
+      getAllAuctionsTokensURI();
+    }
+  }, [ids]);
 
   return { ...status };
 };

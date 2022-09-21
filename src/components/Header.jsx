@@ -15,7 +15,7 @@ const Header = () => {
         </div>
         <div className="header__menu">
           <ul>
-            <Link className="link" to="/">
+            <Link className="link" to="home">
               Home
             </Link>
             <Link className="link" to="/mynft">
