@@ -52,9 +52,11 @@ const ActiveAuctions = () => {
           marginTop: "100px",
         }}
       >
-        {activeAuctions.map((item) => (
-          <MyAuctions auction={item} />
-        ))}
+        {activeAuctions.length ? (
+          activeAuctions.map((item) => <MyAuctions auction={item} />)
+        ) : (
+          <p> You have not active auctions </p>
+        )}
       </div>
     </>
   );
