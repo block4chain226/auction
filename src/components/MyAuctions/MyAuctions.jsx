@@ -27,23 +27,16 @@ const MyAuctions = ({ auction }) => {
     );
 
     leftTime > 0 ? setTime(leftTime + 12000) : setTime(0);
+    if (!time) {
+      endAuction();
+    }
   }
 
   async function endAuction(e) {
     try {
-      const auctionId = titleRef.current.props.databoard;
-      // const timestamp = await auctionContract.time();
-      const endedAuction = await auctionContract.endAuction(auctionId);
-      // console.log(
-      //   "🚀 ~ file: MyAuctions.jsx ~ line 38 ~ endAuction ~ endedAuction",
-      //   endedAuction
-      // );
-      // await auctionContract.on("EndAuction", (endTime) => {
-      //   console.log("timeStamp:", endTime);
-      // });
-
+      const endedAuction = await auctionContract.endAuction(auction.auctionId);
       if (auction.highestBidder !== accounts[0]) {
-        const myBids = await auctionContract.bids(accounts, auctionId);
+        const myBids = await auctionContract.bids(accounts, auction.auctionId);
         setBids(myBids);
         myBids > 0 ? setIsWithdraw(true) : setIsWithdraw(false);
       } else {

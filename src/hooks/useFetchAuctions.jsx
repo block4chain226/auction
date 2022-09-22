@@ -40,7 +40,7 @@ const useFetchAuctions = (account = undefined) => {
   async function getAllActiveAuctions() {
     try {
       const auctions = await auctionContract.getAllAuctions();
-      const activeAuctions = auctions.filter((item) => item.isEnd);
+      const activeAuctions = auctions.filter((item) => !item.isEnd);
 
       setStatus(activeAuctions);
     } catch (err) {

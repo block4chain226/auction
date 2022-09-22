@@ -35,7 +35,7 @@ const Home = () => {
 
   return (
     <>
-      <div
+      {/* <div
         style={{
           width: "100%",
           padding: "10px",
@@ -45,15 +45,15 @@ const Home = () => {
           justifyContent: "center",
           marginTop: "100px",
         }}
-      >
-        {loading ? <p>Loading...</p> : ""}
+      > */}
+      {loading ? <p>Loading...</p> : ""}
 
-        {activeAuctions && activeAuctions !== undefined ? (
-          <Dashboard activeAuctions={activeAuctions} />
-        ) : (
-          "You have not NFT's..."
-        )}
-      </div>
+      {activeAuctions && activeAuctions !== undefined
+        ? activeAuctions.map((item, index) => (
+            <Dashboard activeAuction={item} />
+          ))
+        : "You have not NFT's..."}
+      {/* </div> */}
     </>
   );
 };
