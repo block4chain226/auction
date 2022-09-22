@@ -23,6 +23,10 @@ const Dashboard = ({ activeAuction }) => {
     leftTime > 0 ? setTime(leftTime + 12000) : setTime(0);
   }
 
+  function closeBidd() {
+    setBiddAuction(false);
+  }
+
   useEffect(() => {
     getTimeLeft();
   }, [activeAuction]);
@@ -55,7 +59,15 @@ const Dashboard = ({ activeAuction }) => {
             </div>
           </div>
         }
-        {biddAuction ? <BiddAuction auction={activeAuction} /> : ""}
+        {biddAuction ? (
+          <BiddAuction
+            auction={activeAuction}
+            time={time}
+            closeBidd={closeBidd}
+          />
+        ) : (
+          ""
+        )}
       </div>
     </>
   );

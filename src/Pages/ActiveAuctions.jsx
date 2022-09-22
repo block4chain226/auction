@@ -11,6 +11,7 @@ const ActiveAuctions = () => {
   const [activeAuctions, setActiveAuctions] = useState([]);
   const { accounts } = useContext(AuthContext);
   const auctions = useFetchAuctions(accounts[0]);
+  // debugger;
   const { nftData, loading, error } = useFetchCIDs(accounts[0], auctions);
   const fetchedData = useFetchNftsData(nftData);
 
@@ -35,6 +36,7 @@ const ActiveAuctions = () => {
         text: fetchedData[index][2],
       });
     });
+
     setActiveAuctions(newAuctions);
     console.log("auctions+tokensUri", newAuctions);
   }

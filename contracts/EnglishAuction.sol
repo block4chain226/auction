@@ -26,9 +26,9 @@ contract EnglishAuction{
         }
 
         Auction[] public auctions;
-        mapping(address=>mapping(uint=>Auction)) public auctionsOwners;
+        // mapping(address=>mapping(uint=>Auction)) public auctionsOwners;
         //how much active auctions owner has
-        mapping(address=>uint) private ownerAuctionsCount;
+        // mapping(address=>uint) private ownerAuctionsCount;
         //bidder=>auctionId=>bidd
         mapping(address=>mapping(uint=>uint)) public bids;
         event EndAuction(uint endTime);
@@ -57,8 +57,8 @@ contract EnglishAuction{
             auctions.push(auction);
             nft.transferFrom(auction.owner, address(this), auction.nftId);
             //?
-            auctionsOwners[auction.owner][ownerAuctionsCount[auction.owner]] = auction;
-            ownerAuctionsCount[auction.owner]++;
+            // auctionsOwners[auction.owner][ownerAuctionsCount[auction.owner]] = auction;
+            // ownerAuctionsCount[auction.owner]++;
             /////////////////////////////////////////////mistake!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // auctionsOwners[auction.owner][auctions.length] = auction;
         }
@@ -85,7 +85,9 @@ contract EnglishAuction{
             // require(auction.highestBidder != address(0), "no one has not raised up bids");
             require(block.timestamp >= auction.totalTime, "the auction has still not over");
             auction.isEnd = true;
-            auctionsOwners[auction.owner][ownerAuctionsCount[auction.owner]-1] = auction;
+            ///problem!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // auctionsOwners[auction.owner][ownerAuctionsCount[auction.owner]-1] = auction;
+            auctions[auctionId] = auction;
             //?
             // ownerAuctionsCount[auction.owner]--;
              if(auction.highestBidder != address(0) && auction.highestBidder != auction.owner){
@@ -109,13 +111,13 @@ contract EnglishAuction{
             payable(msg.sender).transfer(moneyToReturn);
         }
 
-       function getAccountAuctionByIndex(address account, uint index) public view returns(Auction memory){
-        return auctionsOwners[account][index];
-       }
+    //    function getAccountAuctionByIndex(address account, uint index) public view returns(Auction memory){
+    //     return auctionsOwners[account][index];
+    //    }
 
-       function getOwnerAuctionsCount() public view returns(uint){
-        return ownerAuctionsCount[msg.sender];
-       }
+    //    function getOwnerAuctionsCount() public view returns(uint){
+    //     return ownerAuctionsCount[msg.sender];
+    //    }
        function getAllAuctions() public view returns(Auction[] memory){
         return auctions;
        }
