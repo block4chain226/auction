@@ -51,6 +51,21 @@ const useFetchAuctions = (account = undefined) => {
     }
   }
 
+  async function getAllParticipationAuctions() {
+    try {
+      const auctions = await auctionContract.bids(account);
+      const activeAuctions = auctions.filter((item) => !item.isEnd);
+      console.log(
+        "🚀 ~ file: useFetchAuctions.jsx ~ line 44 ~ getAllActiveAuctions ~ activeAuctions",
+        activeAuctions
+      );
+
+      setStatus(activeAuctions);
+    } catch (err) {
+      console.log("error: ", err);
+    }
+  }
+
   useEffect(() => {
     if (account) {
       getAllAccountAuctions();

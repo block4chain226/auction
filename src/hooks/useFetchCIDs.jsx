@@ -101,10 +101,15 @@ const useFetchCIDs = (accounts, ids) => {
   }, [accounts, ids]);
 
   useEffect(() => {
-    if (accounts === undefined && ids.length > 0) {
+    if (accounts === undefined && ids !== undefined) {
       getAllAuctionsTokensURI();
     }
   }, [ids]);
+  useEffect(() => {
+    if (accounts === undefined && ids === undefined) {
+      setStatus({ error: "error" });
+    }
+  }, []);
 
   return { ...status };
 };

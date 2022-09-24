@@ -2,9 +2,49 @@ import React from "react";
 import MyButton from "../../Ui/MyButton/MyButton";
 import cl from "./BiddAuction.module.css";
 import Countdown from "react-countdown";
+import { useContext, useState } from "react";
 import "../../index.scss";
+import BiddContext from "../../context/BiddContext";
+import { useEffect } from "react";
+import ProviderContext from "../../context/ProviderContext";
+import AuthContext from "../../context/AuthContext";
 
 const BiddAuction = ({ auction, time, closeBidd }) => {
+  const { accounts } = useContext(AuthContext);
+  const { nftContract, auctionContract } = useContext(ProviderContext);
+  const { bidd, setBidd } = useContext(BiddContext);
+
+  async function riseBidd(e) {
+    debugger;
+    if (
+      Number(bidd.testBidd) !== undefined &&
+      Number(bidd.testBidd) > Number(auction.highestPrice)
+    ) {
+      setBidd({ newBidd: bidd.testBidd });
+      console.log("RIGHT!!!");
+    } else {
+      console.log("Enter Bidd!");
+    }
+  }
+
+  function currentPrice() {
+    console.log("bidd", bidd.newBidd);
+
+    if (bidd.newBidd > Number(auction.highestPrice)) {
+      debugger;
+      setBidd({ auctionId: auction.auctionId, newBidd: bidd.newBidd });
+    }
+    if (bidd.newBidd < Number(auction.highestPrice)) {
+      console.log("newBidd", bidd);
+      console.log("auction", auction.highestPrice);
+      debugger;
+      setBidd({
+        auctionId: auction.auctionId,
+        newBidd: Number(auction.highestPrice),
+      });
+    }
+  }
+
   async function getAuctions(e) {
     const auctionId = e.target.attributes.getNamedItem("data-index").value;
     // const result = await auctionContract.auctions(auctionId);
@@ -14,6 +54,7 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
       e.target.attributes.getNamedItem("data-index").value
     );
   }
+
   return (
     <>
       <div key={auction.auctionId} className={cl.bidd}>
@@ -44,24 +85,31 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
               <div>
                 <label>
                   current price
-                  <input readOnly value={auction.startPrice} />
+                  <input
+                    readOnly
+                    value={
+                      bidd.newBidd > auction.highestPrice
+                        ? bidd.newBidd
+                        : auction.highestPrice
+                    }
+                  />
                 </label>
               </div>
               <div>
                 <label>
                   my Bidd
-                  <input />
+                  <input
+                    onChange={(e) => {
+                      setBidd({ testBidd: e.target.value });
+                    }}
+                  />
                 </label>
               </div>
               <MyButton
                 data-index={Number(auction.auctionId)}
-                onClick={(e) =>
-                  console.log(
-                    e.target.attributes.getNamedItem("data-index").value
-                  )
-                }
+                onClick={(e) => riseBidd(e)}
               >
-                Bidd1
+                Bidd
               </MyButton>
             </div>
 

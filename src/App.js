@@ -8,6 +8,7 @@ import Home from "./Pages/Home";
 import MyNft from "./Pages/MyNft";
 import ActiveAuctions from "./Pages/ActiveAuctions";
 import { Layout } from "./components/Layout";
+import { BiddProvider } from "./context/BiddContext";
 
 function App() {
   return (
@@ -16,14 +17,16 @@ function App() {
         <AuthProvider>
           <ProviderProvider>
             <Web3StorageProvider>
-              <Routes>
-                <Route path="/" element={<Layout />}>
-                  <Route index element={<Main />} />
-                  <Route path="home" element={<Home />} />
-                  <Route path="activeauctions" element={<ActiveAuctions />} />
-                  <Route path="mynft" element={<MyNft />} />
-                </Route>
-              </Routes>
+              <BiddProvider>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<Main />} />
+                    <Route path="home" element={<Home />} />
+                    <Route path="activeauctions" element={<ActiveAuctions />} />
+                    <Route path="mynft" element={<MyNft />} />
+                  </Route>
+                </Routes>
+              </BiddProvider>
             </Web3StorageProvider>
           </ProviderProvider>
         </AuthProvider>
