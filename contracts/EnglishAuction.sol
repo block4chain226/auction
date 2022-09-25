@@ -122,4 +122,8 @@ contract EnglishAuction{
         return auctions;
        }
 
-}
+       function getAuction(uint auctionId)public view returns(Auction memory){
+        return auctions[auctionId];
+       }
+
+} 

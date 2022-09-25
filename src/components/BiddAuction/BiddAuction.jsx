@@ -8,52 +8,55 @@ import BiddContext from "../../context/BiddContext";
 import { useEffect } from "react";
 import ProviderContext from "../../context/ProviderContext";
 import AuthContext from "../../context/AuthContext";
+const ethers = require("ethers");
 
 const BiddAuction = ({ auction, time, closeBidd }) => {
   const { accounts } = useContext(AuthContext);
   const { nftContract, auctionContract } = useContext(ProviderContext);
+  const [highestPrice, setHighestPrice] = useState("");
   const { bidd, setBidd } = useContext(BiddContext);
+  const [biddChanged, setBiddChanged] = useState(0);
+  const [currentBidd, setCurrentBidd] = useState(undefined);
 
   async function riseBidd(e) {
-    debugger;
     if (
-      Number(bidd.testBidd) !== undefined &&
-      Number(bidd.testBidd) > Number(auction.highestPrice)
+      Number(bidd.newBidd) !== undefined &&
+      Number(bidd.newBidd) > Number(auction.highestPrice)
     ) {
-      setBidd({ newBidd: bidd.testBidd });
-      console.log("RIGHT!!!");
+      const bidded = await auctionContract.riseBid(auction.auctionId, {
+        from: accounts[0],
+        value: ethers.utils.parseUnits(String(bidd.newBidd), "wei"),
+      });
+      await bidded.wait();
+      console.log("promise done!");
+      await getAuctionHighestPrice(auction.auctionId);
     } else {
       console.log("Enter Bidd!");
     }
   }
-
-  function currentPrice() {
-    console.log("bidd", bidd.newBidd);
-
-    if (bidd.newBidd > Number(auction.highestPrice)) {
+  async function getAuctionHighestPrice(auctionId) {
+    try {
+      const auctionUpdate = await auctionContract.getAuction(auctionId);
+      auction = auctionUpdate;
+      setBidd({ newBidd: auctionUpdate.highestPrice });
+      sessionStorage.setItem(
+        `bidd${auction.auctionId}`,
+        auctionUpdate.highestPrice
+      );
+      // debugger;
+      console.log("getAuctionHighestPrice", bidd.newBidd);
       debugger;
-      setBidd({ auctionId: auction.auctionId, newBidd: bidd.newBidd });
-    }
-    if (bidd.newBidd < Number(auction.highestPrice)) {
-      console.log("newBidd", bidd);
-      console.log("auction", auction.highestPrice);
-      debugger;
-      setBidd({
-        auctionId: auction.auctionId,
-        newBidd: Number(auction.highestPrice),
-      });
+    } catch (err) {
+      console.log("error: ", err);
     }
   }
 
-  async function getAuctions(e) {
-    const auctionId = e.target.attributes.getNamedItem("data-index").value;
-    // const result = await auctionContract.auctions(auctionId);
-
-    console.log(
-      "🚀 ~ file: MyAuctions.jsx ~ line 69",
-      e.target.attributes.getNamedItem("data-index").value
-    );
-  }
+  useEffect(() => {
+    if (!sessionStorage.getItem(`bidd${auction.auctionId}`)) {
+      setBidd({ newBidd: auction.highestPrice });
+    }
+    console.log(sessionStorage.getItem(`bidd${auction.auctionId}`));
+  }, []);
 
   return (
     <>
@@ -79,20 +82,14 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
               <div>
                 <label>
                   start price
-                  <input readOnly value={auction.startPrice} />
+                  <input readOnly defaultValue={auction.startPrice} />
                 </label>
               </div>
               <div>
                 <label>
                   current price
-                  <input
-                    readOnly
-                    value={
-                      bidd.newBidd > auction.highestPrice
-                        ? bidd.newBidd
-                        : auction.highestPrice
-                    }
-                  />
+                  {/* <input readOnly value={bidd.newBidd} /> */}
+                  <input readOnly value={bidd.newBidd} />
                 </label>
               </div>
               <div>
@@ -100,7 +97,7 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
                   my Bidd
                   <input
                     onChange={(e) => {
-                      setBidd({ testBidd: e.target.value });
+                      setBidd({ newBidd: e.target.value });
                     }}
                   />
                 </label>

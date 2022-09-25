@@ -7,10 +7,11 @@ const BiddContext = createContext();
 export const BiddProvider = ({ children }) => {
   const [bidd, setBidd] = useState([
     {
-      auctionId: undefined,
-      bidder: undefined,
-      beforeBidd: undefined,
-      newBidd: undefined,
+      auctionId: "",
+      bidder: "",
+      beforeBidd: "",
+      testBidd: "",
+      newBidd: "",
     },
   ]);
 
