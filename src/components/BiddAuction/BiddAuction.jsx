@@ -55,6 +55,9 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
     if (!sessionStorage.getItem(`bidd${auction.auctionId}`)) {
       setBidd({ newBidd: auction.highestPrice });
     }
+    if (sessionStorage.getItem(`bidd${auction.auctionId}`)) {
+      setBidd({ newBidd: sessionStorage.getItem(`bidd${auction.auctionId}`) });
+    }
     console.log(sessionStorage.getItem(`bidd${auction.auctionId}`));
   }, []);
 

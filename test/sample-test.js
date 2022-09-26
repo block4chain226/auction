@@ -227,7 +227,7 @@ describe("NFTFactory", function () {
     console.log("🚀 ~ file: sample-test.js ~ line 229 ~ auction", auction);
   });
   ////////////////////
-  it.only("after endAuction getAccountAuctionByIndex should return aauction with isEnd==true", async () => {
+  it("after endAuction getAccountAuctionByIndex should return aauction with isEnd==true", async () => {
     await nftContract.connect(addr1).safeMint(addr1.address, "http", {
       value: ethers.utils.parseEther("1"),
     });
@@ -261,5 +261,41 @@ describe("NFTFactory", function () {
       "🚀 ~ file: sample-test.js ~ line 260 ~ it.only ~ auctionsAll",
       auctionsAll
     );
+  });
+  it.only("should return auction Id using bids", async () => {
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    await nftContract.connect(addr1).safeMint(addr1.address, "http", {
+      value: ethers.utils.parseEther("1"),
+    });
+    const approveForAll = await nftContract
+      .connect(addr1)
+      .setApprovalForAll(nftAuction.address, true);
+    await nftAuction.connect(addr1).startAuction(1, 1, 60);
+    await nftAuction.connect(addr1).startAuction(2, 1, 60);
+    await nftAuction
+      .connect(addr2)
+      .riseBid(0, { value: ethers.utils.parseUnits("10", "wei") });
+    await nftAuction
+      .connect(addr3)
+      .riseBid(0, { value: ethers.utils.parseUnits("20", "wei") });
+    await nftAuction
+      .connect(addr2)
+      .riseBid(0, { value: ethers.utils.parseUnits("30", "wei") });
+
+    await nftAuction
+      .connect(addr2)
+      .riseBid(1, { value: ethers.utils.parseUnits("10", "wei") });
+    const count = await nftAuction.getAccountAuctionsParticipationCount(
+      addr2.address
+    );
+    for (let i = 0; i < count; i++) {
+      const auctionId = await nftAuction.getAuctionParticipationId(
+        addr2.address,
+        i
+      );
+      console.log("auctionId = ", auctionId);
+    }
   });
 });
