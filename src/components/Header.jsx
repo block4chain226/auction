@@ -24,7 +24,7 @@ const Header = () => {
             <Link className="link" to="/activeauctions">
               Active Auctions
             </Link>
-            <Link className="link" to="mynft">
+            <Link className="link" to="auctionsparticipation">
               Auctions Participation
             </Link>
           </ul>

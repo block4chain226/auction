@@ -11,7 +11,7 @@ const ActiveAuctions = () => {
   const [activeAuctions, setActiveAuctions] = useState([]);
   const { accounts } = useContext(AuthContext);
   const auctions = useFetchAuctions(accounts[0]);
-  // debugger;
+
   const { nftData, loading, error } = useFetchCIDs(accounts[0], auctions);
   const fetchedData = useFetchNftsData(nftData);
 
@@ -29,6 +29,7 @@ const ActiveAuctions = () => {
 
   function addMetaDataToAuctions() {
     console.log("newAuctionsBefore: ", auctions);
+
     const newAuctions = auctions.map((item, index) => {
       return Object.assign({}, item, {
         title: fetchedData[index][0],

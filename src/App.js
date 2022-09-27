@@ -9,6 +9,7 @@ import MyNft from "./Pages/MyNft";
 import ActiveAuctions from "./Pages/ActiveAuctions";
 import { Layout } from "./components/Layout";
 import { BiddProvider } from "./context/BiddContext";
+import AuctionsParticipation from "../src/Pages/AuctionsParticipation";
 
 function App() {
   return (
@@ -22,8 +23,12 @@ function App() {
                   <Route path="/" element={<Layout />}>
                     <Route index element={<Main />} />
                     <Route path="home" element={<Home />} />
-                    <Route path="activeauctions" element={<ActiveAuctions />} />
                     <Route path="mynft" element={<MyNft />} />
+                    <Route path="activeauctions" element={<ActiveAuctions />} />
+                    <Route
+                      path="auctionsparticipation"
+                      element={<AuctionsParticipation />}
+                    />
                   </Route>
                 </Routes>
               </BiddProvider>

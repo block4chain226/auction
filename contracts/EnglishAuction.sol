@@ -51,8 +51,8 @@ contract EnglishAuction{
                 nftId: _nftId,
                 startPrice: _startPrice,
                 highestPrice: _startPrice,
-                totalTime: uint32(block.timestamp + _totalTime),
-                // totalTime: uint32(_totalTime),
+                // totalTime: uint32(block.timestamp + _totalTime),
+                totalTime: uint32(_totalTime),
                 startTime: block.timestamp,
                 highestBidder: msg.sender,
                 isStarted: true,
@@ -108,10 +108,11 @@ contract EnglishAuction{
             payable(msg.sender).transfer(moneyToReturn);
         }
 
-        function deleteAuctionParticipationId(address account, uint index, uint totalIndex) internal {
-            for(uint i = index; i < totalIndex - 1; i++){
+        function deleteAuctionParticipationId(address account, uint index, uint totalIndex) public {
+            for(uint i = index; i < totalIndex-1; i++){
                 auctionsParticipationId[account][i] = auctionsParticipationId[account][i + 1];
             }
+            delete auctionsParticipationId[account][totalIndex-1];
         }
 
        function getAllAuctions() public view returns(Auction[] memory){
@@ -132,6 +133,10 @@ contract EnglishAuction{
 
        function isAccountBiddedonAuction(uint auctionId, address account) public view returns(bool){
         return isBiddedOnAuction[auctionId][account];
+       }
+
+       function getAuctionBiddAmount(address account, uint auctionId)public view returns(uint){
+        return bids[account][auctionId];
        }
       
 

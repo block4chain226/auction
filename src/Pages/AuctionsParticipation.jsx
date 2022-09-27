@@ -45,11 +45,11 @@ const AuctionsParticipation = () => {
           marginTop: "100px",
         }}
       >
-        {activeAuctions.length ? (
+        {/* {activeAuctions.length ? (
           activeAuctions.map((item) => <MyAuctions auction={item} />)
         ) : (
           <p> You have not active auctions </p>
-        )}
+        )} */}
       </div>
     </>
   );

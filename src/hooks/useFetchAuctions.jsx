@@ -4,34 +4,19 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import ProviderContext from "../context/ProviderContext";
 
-const useFetchAuctions = (account = undefined) => {
+const useFetchAuctions = (account) => {
   const { nftContract, auctionContract } = useContext(ProviderContext);
   const [status, setStatus] = useState([]);
 
   async function getAllAccountAuctions() {
     try {
-      let allAccountAuctions = [];
-      // setStatus({ loading1: true });
-      // const accountAuctionsCount =
-      // await auctionContract.getOwnerAuctionsCount();
       const auctions = await auctionContract.getAllAuctions();
-
-      // for (let i = 0; i < accountAuctionsCount - 1; i++) {
-      //   ///problem!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //   const auction = await auctionContract.getAccountAuctionByIndex(
-      //     account,
-      //     i
-      //   );
-
-      // console.log("AUCTION", auction);
-      // auctions.push(auction);
-      const activeAuctions = auctions.filter((item) => !item.isEnd);
-      // debugger;
+      // const activeAuctions = auctions.filter((item) => !item.isEnd);
+      const activeAuctions = auctions.filter(
+        (item) => item.owner.toLowerCase() === account && !item.isEnd
+      );
       setStatus(activeAuctions);
     } catch (err) {
-      ///////////////////////////////////////////////////////////////////////////////////////////////ok
-
-      // setStatus({ error1: err });
       console.log("error: ", err);
     }
   }
@@ -52,15 +37,30 @@ const useFetchAuctions = (account = undefined) => {
   }
 
   async function getAllParticipationAuctions() {
+    let auctionsId = [];
+    let participationAuctions = [];
     try {
-      const auctions = await auctionContract.bids(account);
-      const activeAuctions = auctions.filter((item) => !item.isEnd);
-      console.log(
-        "🚀 ~ file: useFetchAuctions.jsx ~ line 44 ~ getAllActiveAuctions ~ activeAuctions",
-        activeAuctions
+      const count = await auctionContract.getAccountAuctionsParticipationCount(
+        account
       );
+      for (let i = 0; i < count; i++) {
+        const auctionId = await auctionContract.getAuctionParticipationId(
+          account,
+          i
+        );
+        const auction = await auctionContract.getAuction(auctionId);
+        participationAuctions.push(auction);
+      }
+      // const temp = participationAuctions.map(
+      //   async (item) =>
+      //     await auctionContract.getAuctionBiddAmount(
+      //       account,
+      //       item.auctionId > 0
+      //     )
+      // );
 
-      setStatus(activeAuctions);
+      console.log("temp", participationAuctions);
+      setStatus(participationAuctions);
     } catch (err) {
       console.log("error: ", err);
     }
@@ -69,6 +69,7 @@ const useFetchAuctions = (account = undefined) => {
   useEffect(() => {
     if (account) {
       getAllAccountAuctions();
+      // getAllParticipationAuctions();
     }
   }, [account]);
 

@@ -9,8 +9,8 @@ const ProviderContext = createContext();
 export const ProviderProvider = ({ children }) => {
   let nftContract, auctionContract;
   const [updated, setUpdated] = useState(0);
-  const nftContractAddress = "0xc1Ac91c96ABeB1Fa7b7dceba933Cc99aE3A8d0Bc";
-  const auctionContractAddress = "0x44a69b39B17E2435bbbA360C5053c422266e1621";
+  const nftContractAddress = "0xFd09BA755E4382e99Be30dbE4DDB88D1Eb819780";
+  const auctionContractAddress = "0x84Aa9C30c260aBb836c429cD1CD91c9a3Eb09ea6";
 
   async function getNftProvider(nftContractAddress) {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
