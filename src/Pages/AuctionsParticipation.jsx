@@ -10,7 +10,7 @@ import { useEffect } from "react";
 const AuctionsParticipation = () => {
   const { accounts } = useContext(AuthContext);
   const [activeAuctions, setActiveAuctions] = useState([]);
-  const auctions = useFetchAuctions();
+  const auctions = useFetchAuctions(accounts[0], "partisipation");
   const { nftData, loading, error } = useFetchCIDs(accounts[0], auctions);
   const fetchedData = useFetchNftsData(nftData);
 
@@ -25,6 +25,7 @@ const AuctionsParticipation = () => {
     });
 
     setActiveAuctions(newAuctions);
+    debugger;
     console.log("auctions+tokensUri", newAuctions);
   }
 

@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import ProviderContext from "../context/ProviderContext";
 
-const useFetchAuctions = (account) => {
+const useFetchAuctions = (account, partisipation) => {
   const { nftContract, auctionContract } = useContext(ProviderContext);
   const [status, setStatus] = useState([]);
 
@@ -37,7 +37,6 @@ const useFetchAuctions = (account) => {
   }
 
   async function getAllParticipationAuctions() {
-    let auctionsId = [];
     let participationAuctions = [];
     try {
       const count = await auctionContract.getAccountAuctionsParticipationCount(
@@ -49,17 +48,14 @@ const useFetchAuctions = (account) => {
           i
         );
         const auction = await auctionContract.getAuction(auctionId);
-        participationAuctions.push(auction);
+        const auctionBiddAmount = await auctionContract.getAuctionBiddAmount(
+          account,
+          auctionId
+        );
+        if (auctionBiddAmount > 0) {
+          participationAuctions.push(auction);
+        }
       }
-      // const temp = participationAuctions.map(
-      //   async (item) =>
-      //     await auctionContract.getAuctionBiddAmount(
-      //       account,
-      //       item.auctionId > 0
-      //     )
-      // );
-
-      console.log("temp", participationAuctions);
       setStatus(participationAuctions);
     } catch (err) {
       console.log("error: ", err);
@@ -69,13 +65,18 @@ const useFetchAuctions = (account) => {
   useEffect(() => {
     if (account) {
       getAllAccountAuctions();
-      // getAllParticipationAuctions();
     }
   }, [account]);
 
   useEffect(() => {
     if (account === undefined) {
       getAllActiveAuctions();
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (account && partisipation === "partisipation") {
+      getAllParticipationAuctions();
     }
   }, [account]);
 
