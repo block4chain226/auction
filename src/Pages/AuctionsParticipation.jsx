@@ -6,10 +6,11 @@ import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 import { useState } from "react";
 import { useEffect } from "react";
+import MyParticipation from "../components/MyParticipation/MyParticipation";
 
 const AuctionsParticipation = () => {
   const { accounts } = useContext(AuthContext);
-  const [activeAuctions, setActiveAuctions] = useState([]);
+  const [auctionsParticipation, setAuctionsParticipation] = useState([]);
   const auctions = useFetchAuctions(accounts[0], "partisipation");
   const { nftData, loading, error } = useFetchCIDs(accounts[0], auctions);
   const fetchedData = useFetchNftsData(nftData);
@@ -23,9 +24,7 @@ const AuctionsParticipation = () => {
         text: fetchedData[index][2],
       });
     });
-
-    setActiveAuctions(newAuctions);
-    debugger;
+    setAuctionsParticipation(newAuctions);
     console.log("auctions+tokensUri", newAuctions);
   }
 
@@ -46,11 +45,13 @@ const AuctionsParticipation = () => {
           marginTop: "100px",
         }}
       >
-        {/* {activeAuctions.length ? (
-          activeAuctions.map((item) => <MyAuctions auction={item} />)
+        {auctionsParticipation.length ? (
+          auctionsParticipation.map((item) => (
+            <MyParticipation auction={item} />
+          ))
         ) : (
-          <p> You have not active auctions </p>
-        )} */}
+          <p> you are not participating in any auctions </p>
+        )}
       </div>
     </>
   );

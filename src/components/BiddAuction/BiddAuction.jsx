@@ -45,7 +45,6 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
       );
       // debugger;
       console.log("getAuctionHighestPrice", bidd.newBidd);
-      debugger;
     } catch (err) {
       console.log("error: ", err);
     }

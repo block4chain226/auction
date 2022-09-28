@@ -21,7 +21,7 @@ const MyAuctions = ({ auction }) => {
     const currentTime = new Date().getTime();
     const leftTime = endtime - currentTime;
     leftTime > 0 ? setTime(leftTime + 12000) : setTime(0);
-
+    debugger;
     if (!time) {
       endAuction();
     }
@@ -53,20 +53,14 @@ const MyAuctions = ({ auction }) => {
   async function getAuctions(e) {
     const auctionId = e.target.attributes.getNamedItem("data-index").value;
     const result = await auctionContract.auctions(auctionId);
-
     console.log(
-      "🚀 ~ file: MyAuctions.jsx ~ line 69",
-      e.target.attributes.getNamedItem("data-index").value
-    );
-    console.log(
-      "🚀 ~ file: MyAuctions.jsx ~ line 59 ~ useEffect ~ result",
+      "🚀 ~ file: MyAuctions.jsx ~ line 56 ~ getAuctions ~ result",
       result
     );
   }
 
   useEffect(() => {
     getTimeLeft();
-    console.log(auction);
   }, [auction]);
   return (
     <>

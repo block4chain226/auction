@@ -13,6 +13,9 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.11",
   networks: {
+    hardhat: {
+      allowUnlimitedContractSize: true,
+    },
     goerli: {
       url: process.env.PROVIDER,
       accounts: [process.env.PRIVATE_KEY],

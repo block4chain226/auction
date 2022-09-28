@@ -63,22 +63,22 @@ const useFetchAuctions = (account, partisipation) => {
   }
 
   useEffect(() => {
-    if (account) {
+    if (account && partisipation === undefined) {
       getAllAccountAuctions();
     }
   }, [account]);
 
   useEffect(() => {
-    if (account === undefined) {
+    if (account === undefined && partisipation === undefined) {
       getAllActiveAuctions();
     }
   }, [account]);
 
   useEffect(() => {
-    if (account && partisipation === "partisipation") {
+    if (account && partisipation) {
       getAllParticipationAuctions();
     }
-  }, [account]);
+  }, [account, partisipation]);
 
   return status;
 };
