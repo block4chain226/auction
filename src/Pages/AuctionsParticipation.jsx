@@ -1,5 +1,6 @@
 import React from "react";
 import useFetchNftsData from "../hooks/useFetchNftsData";
+import LoadingSpin from "react-loading-spin";
 import useFetchCIDs from "../hooks/useFetchCIDs";
 import useFetchAuctions from "../hooks/useFetchAuctions";
 import { useContext } from "react";
@@ -45,6 +46,7 @@ const AuctionsParticipation = () => {
           marginTop: "100px",
         }}
       >
+        {loading ? <LoadingSpin /> : ""}
         {auctionsParticipation.length ? (
           auctionsParticipation.map((item) => (
             <MyParticipation auction={item} />

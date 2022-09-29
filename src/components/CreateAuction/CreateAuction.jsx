@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
+import LoadingSpin from "react-loading-spin";
 import ProviderContext from "../../context/ProviderContext";
 import MyButton from "../../Ui/MyButton/MyButton";
 import DateTimePicker from "react-datetime-picker";
@@ -8,16 +9,16 @@ import cl from "./CreateAuction.module.css";
 const CreateAuction = ({ arr, tokenId, closeAuction }) => {
   const { nftContract, auctionContract } = useContext(ProviderContext);
   const [endDate, onChange] = useState(new Date());
+  const [isCreating, setIsCreating] = useState(false);
   const [startPrice, setStartPrice] = useState("");
 
   async function startAuction() {
     if (auctionContract && nftContract && endDate && startPrice) {
-      console.log("tokenId", tokenId);
+      setIsCreating(true);
       const approve = await nftContract.approve(
         auctionContract.address,
         tokenId
       );
-
       await approve.wait();
       const seconds = getSeconds();
       const newAuction = await auctionContract.startAuction(
@@ -26,33 +27,20 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
         seconds
       );
       await newAuction.wait();
+      setIsCreating(false);
       console.log("newAuction", newAuction);
     } else {
       console.log("you have not auction and nft providers");
     }
   }
 
-  async function getAuction(id) {
-    const approve = await nftContract.ownerOf(3);
-    console.log(
-      "🚀 ~ file: CreateAuction.jsx ~ line 37 ~ getAuction ~ approve",
-      approve
-    );
-  }
   function getSeconds() {
-    // const difference = date.getTime() - new Date().getTime();
     console.log(
       "seconds:",
       Math.floor((endDate.getTime() - new Date().getTime()) / 1000)
     );
-
-    // return Math.floor((endDate.getTime() - new Date().getTime()) / 100);
     return endDate.getTime() / 1000;
   }
-  useEffect(() => {
-    // getAuction();
-    console.log("tokenId", tokenId);
-  }, []);
 
   return (
     <>
@@ -77,9 +65,9 @@ const CreateAuction = ({ arr, tokenId, closeAuction }) => {
                   style={{ border: "1px solid red" }}
                 />
               </div>
+              {isCreating ? <LoadingSpin /> : ""}
               <div className={cl.time}>
                 <DateTimePicker onChange={onChange} value={endDate} />
-                <button onClick={getAuction}>test</button>
                 <MyButton onClick={startAuction}>Start Auction</MyButton>
               </div>
             </div>

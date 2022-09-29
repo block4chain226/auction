@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import useFetchAuctions from "../hooks/useFetchAuctions";
+import LoadingSpin from "react-loading-spin";
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
 import useFetchCIDs from "../hooks/useFetchCIDs";
@@ -10,6 +11,7 @@ import useFetchNftsData from "../hooks/useFetchNftsData";
 const ActiveAuctions = () => {
   const [activeAuctions, setActiveAuctions] = useState([]);
   const { accounts } = useContext(AuthContext);
+  const [isUploading, setIsUploading] = useState(false);
   const auctions = useFetchAuctions(accounts[0]);
 
   const { nftData, loading, error } = useFetchCIDs(accounts[0], auctions);
@@ -20,6 +22,7 @@ const ActiveAuctions = () => {
       console.log("auctions", auctions);
     }
   }, [nftData, auctions]);
+
   useEffect(() => {
     if (fetchedData && accounts.length) {
       console.log("fetchedData", fetchedData);
@@ -28,8 +31,6 @@ const ActiveAuctions = () => {
   }, [fetchedData]);
 
   function addMetaDataToAuctions() {
-    console.log("newAuctionsBefore: ", auctions);
-
     const newAuctions = auctions.map((item, index) => {
       return Object.assign({}, item, {
         title: fetchedData[index][0],
@@ -37,9 +38,7 @@ const ActiveAuctions = () => {
         text: fetchedData[index][2],
       });
     });
-
     setActiveAuctions(newAuctions);
-    console.log("auctions+tokensUri", newAuctions);
   }
   return (
     <>
@@ -55,6 +54,7 @@ const ActiveAuctions = () => {
           marginTop: "100px",
         }}
       >
+        {loading ? <LoadingSpin /> : ""}
         {activeAuctions.length ? (
           activeAuctions.map((item) => <MyAuctions auction={item} />)
         ) : (

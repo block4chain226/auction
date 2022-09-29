@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import "../index.scss";
+import LoadingSpin from "react-loading-spin";
 import Web3StorageContext from "../context/Web3StorageContext";
 import ProviderContext from "../context/ProviderContext";
 import AuthContext from "../context/AuthContext";
@@ -10,6 +11,7 @@ const Mint = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [file, setFile] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
   const { makeStorageClient } = useContext(Web3StorageContext);
   const { nftContract } = useContext(ProviderContext);
   const { accounts } = useContext(AuthContext);
@@ -17,11 +19,18 @@ const Mint = () => {
   async function MintNFT(e) {
     if (file[0] && title && text) {
       //get files url
+      setIsUploading(true);
       let url = await uploadFiles(e);
       //minting
       const mint = await nftContract.safeMint(accounts[0], url, {
         value: ethers.utils.parseEther("0.0001"),
       });
+      await mint.wait();
+      setIsUploading(false);
+      setFile("");
+      setTitle("");
+      setText("");
+      alert("Minting success");
       //event logs
       await nftContract.on("Transfer", (from, to, _tokenId) => {
         console.log("Transfer:", from, to, Number(_tokenId));
@@ -40,7 +49,6 @@ const Mint = () => {
     const content = makeFileObjects(title, text);
     mass.push(...content);
     mass.push(...file);
-    console.log(mass);
     const cid = await client.put(mass);
     console.log("cid", cid);
     return cid;
@@ -73,6 +81,7 @@ const Mint = () => {
           <div className="mint__title">
             <input
               onChange={(e) => setTitle(e.target.value)}
+              value={title}
               placeholder="Title..."
             />
           </div>
@@ -80,6 +89,7 @@ const Mint = () => {
             <textarea
               onChange={(e) => setText(e.target.value)}
               placeholder="Description..."
+              value={text}
             />
           </div>
           <div className="mint__upload">
@@ -90,7 +100,9 @@ const Mint = () => {
               id="file"
               accept=".jpeg, .png, .jpg"
               onChange={(e) => setFile(e.target.files)}
+              defaultValue={file.name}
             />
+            {isUploading ? <LoadingSpin /> : ""}
             <button onClick={(e) => MintNFT(e)}>upload</button>
           </div>
         </div>

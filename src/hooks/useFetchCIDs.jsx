@@ -45,8 +45,6 @@ const useFetchCIDs = (accounts, ids) => {
     try {
       let tokensURI = [];
       setStatus({ loading: true });
-      console.log("ids", ids);
-
       if (ids.length > 0) {
         for (let i = 0; i < ids.length; i++) {
           let tokenURI = await nftContract.tokenURI(Number(ids[i][2]));
@@ -68,8 +66,6 @@ const useFetchCIDs = (accounts, ids) => {
     try {
       let tokensURI = [];
       setStatus({ loading: true });
-      console.log("ids", ids);
-
       //auction->tokenId->tokenURI->push title/text/url
       if (ids.length > 0) {
         for (let i = 0; i < ids.length; i++) {

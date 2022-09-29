@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useState } from "react";
+import LoadingSpin from "react-loading-spin";
 import { useEffect } from "react";
 import MyButton from "../../Ui/MyButton/MyButton";
 import Countdown from "react-countdown";
@@ -10,26 +11,27 @@ import AuthContext from "../../context/AuthContext";
 
 const MyAuctions = ({ auction }) => {
   const { accounts } = useContext(AuthContext);
-  const { nftContract, auctionContract } = useContext(ProviderContext);
+  const { auctionContract } = useContext(ProviderContext);
   const [bids, setBids] = useState("");
   const [time, setTime] = useState("");
   const [isWithdraw, setIsWithdraw] = useState(false);
   const titleRef = useRef();
+  const [showAuction, setShowAuction] = useState(true);
 
   function getTimeLeft() {
     const endtime = auction.totalTime * 1000;
     const currentTime = new Date().getTime();
     const leftTime = endtime - currentTime;
     leftTime > 0 ? setTime(leftTime + 12000) : setTime(0);
-    debugger;
-    if (!time) {
+    if (time < 1) {
       endAuction();
     }
   }
 
   async function endAuction(e) {
     try {
-      const endedAuction = await auctionContract.endAuction(auction.auctionId);
+      await auctionContract.endAuction(auction.auctionId);
+      setShowAuction(false);
       if (auction.highestBidder !== accounts[0]) {
         const myBids = await auctionContract.bids(accounts, auction.auctionId);
         setBids(myBids);
@@ -50,62 +52,54 @@ const MyAuctions = ({ auction }) => {
       console.log("you have not bidded!");
     }
   }
-  async function getAuctions(e) {
-    const auctionId = e.target.attributes.getNamedItem("data-index").value;
-    const result = await auctionContract.auctions(auctionId);
-    console.log(
-      "🚀 ~ file: MyAuctions.jsx ~ line 56 ~ getAuctions ~ result",
-      result
-    );
-  }
 
   useEffect(() => {
     getTimeLeft();
   }, [auction]);
   return (
     <>
-      <div className={cl.col}>
-        <div className={cl.item}>
-          <div className={cl.image}>
-            <img src={auction.image}></img>
-          </div>
-          <div className={cl.info}>
-            <div className={cl.title}>{auction.title}</div>
-            <div className={cl.text}>{auction.text}</div>
-            <div className={cl.leftTime}>
-              {time > 0 && !isWithdraw ? (
-                <Countdown
-                  databoard={Number(auction.auctionId)}
-                  ref={titleRef}
-                  onComplete={(e) => {
-                    endAuction(e);
-                  }}
-                  date={Date.now() + time}
-                />
-              ) : (
-                <MyButton onClick={withdraw}>Withdraw</MyButton>
-              )}
+      {showAuction ? (
+        <div className={cl.col}>
+          <div className={cl.item}>
+            <div className={cl.image}>
+              <img src={auction.image}></img>
+              <p>{auction.totalTime}</p>
             </div>
-            <div className={cl.timePassed}></div>
-            <div className={cl.bidder}>
-              <label>
-                bidder
-                <input name="bidder" />
-              </label>
-            </div>
-            <div className={cl.stop}>
-              <button
-                onClick={(e) => {
-                  getAuctions(e);
-                }}
-                data-index={Number(auction.auctionId)}
-              >
-                Stop Auction
-              </button>
+            <div className={cl.info}>
+              <div className={cl.title}>{auction.title}</div>
+              <div className={cl.text}>{auction.text}</div>
+              <div data-auctionId={auction.auctionId} className={cl.leftTime}>
+                {time > 0 && !isWithdraw ? (
+                  <Countdown
+                    databoard={Number(auction.auctionId)}
+                    ref={titleRef}
+                    onComplete={(e) => {
+                      endAuction(e);
+                    }}
+                    date={Date.now() + time}
+                  />
+                ) : (
+                  <MyButton onClick={withdraw}>Withdraw</MyButton>
+                )}
+              </div>
+              <div className={cl.timePassed}></div>
+              <div className={cl.bidder}>
+                <label for="bidder">
+                  bidder
+                  <input name="bidder" />
+                </label>
+              </div>
+              <div data-auctionId={auction.auctionId} className={cl.stop}>
+                <button data-index={Number(auction.auctionId)}>
+                  Stop Auction
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        ""
+      )}
     </>
   );
 };

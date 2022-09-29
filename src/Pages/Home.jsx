@@ -49,9 +49,14 @@ const Home = () => {
       {loading ? <p>Loading...</p> : ""}
 
       {activeAuctions && activeAuctions !== undefined
-        ? activeAuctions.map((item, index) => (
-            <Dashboard activeAuction={item} />
-          ))
+        ? activeAuctions.map((item, index) =>
+            !accounts.length ||
+            item.owner.toLowerCase() !== accounts[0].toLowerCase() ? (
+              <Dashboard activeAuction={item} />
+            ) : (
+              ""
+            )
+          )
         : "You have not NFT's..."}
       {/* </div> */}
     </>

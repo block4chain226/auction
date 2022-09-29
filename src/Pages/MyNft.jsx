@@ -1,5 +1,6 @@
 import NftItem from "../components/NftItem/NftItem";
 import React, { useEffect, useContext } from "react";
+import LoadingSpin from "react-loading-spin";
 import AuthContext from "../context/AuthContext";
 import useFetchCIDs from "../hooks/useFetchCIDs";
 import useFetchNftsData from "../hooks/useFetchNftsData";
@@ -10,15 +11,6 @@ const MyNft = () => {
   const fetchedData = useFetchNftsData(nftData);
 
   if (error) console.log("fetching error!");
-
-  useEffect(() => {
-    // if (fetchedData && fetchedData.length) {
-    console.log(
-      "🚀 ~ file: MyNft.jsx ~ line 16 ~ MyNft ~ fetchedData",
-      fetchedData
-    );
-    // }
-  }, [fetchedData, nftData]);
 
   return (
     <>
@@ -33,7 +25,7 @@ const MyNft = () => {
           marginTop: "100px",
         }}
       >
-        {loading ? <p>Loading...</p> : ""}
+        {loading ? <LoadingSpin /> : ""}
 
         {fetchedData && fetchedData !== undefined ? (
           <NftItem links={fetchedData} tokensId={tokensId} />
