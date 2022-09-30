@@ -4,6 +4,8 @@ import Countdown from "react-countdown";
 import cl from "./MyParticipation.module.css";
 import ProviderContext from "../../context/ProviderContext";
 import AuthContext from "../../context/AuthContext";
+import BiddAuction from "../BiddAuction/BiddAuction";
+import BiddForm from "../BiddForm/BiddForm";
 
 const MyParticipation = ({ auction }) => {
   const { accounts } = useContext(AuthContext);
@@ -40,7 +42,7 @@ const MyParticipation = ({ auction }) => {
 
   return (
     <>
-      {showAuction ? (
+      {/* {showAuction ? (
         <div className={cl.col}>
           <div className={cl.item}>
             <div className={cl.image}>
@@ -64,12 +66,43 @@ const MyParticipation = ({ auction }) => {
               </div>
               <div className={cl.timePassed}></div>
               <div className={cl.bidder}>
-                <label>
-                  bidder
-                  <input name="bidder" />
-                </label>
+                <BiddForm auction={auction} />
               </div>
+
               <div className={cl.stop}></div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )} */}
+      {showAuction ? (
+        <div className={cl.col}>
+          <div className={cl.image}>
+            <img src={auction.image} />
+          </div>
+          <div className={cl.content}>
+            <div className={cl.timer}>
+              {time > 0 && !isWithdraw ? (
+                <Countdown
+                  onComplete={() => setIsWithdraw(true)}
+                  date={Date.now() + time}
+                />
+              ) : auction.highestBidder.toLowerCase() !==
+                accounts[0].toLowerCase() ? (
+                <MyButton onClick={withdraw}>Withdraw</MyButton>
+              ) : (
+                "You will get your money when auction owner will get his nft"
+              )}
+            </div>
+            <div className={cl.biddContainer}>
+              <BiddForm auction={auction} />
+            </div>
+            <div className={cl.info}>
+              <div className={cl.title}>
+                <h1>{auction.title}</h1>
+              </div>
+              <div className={cl.text}>{auction.text}</div>
             </div>
           </div>
         </div>

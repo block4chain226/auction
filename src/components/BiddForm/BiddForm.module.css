@@ -8,11 +8,11 @@
   margin-top: 100px;
 }
 .bidd {
-  position: absolute;
-  width: 40%;
-  background-color: #ffffff;
+  /* position: absolute; */
+  width: 100%;
   display: flex;
-  background-color: rgb(118, 155, 186);
+  /* border: 1px solid #eff2f5; */
+  border-radius: 10px;
 }
 .item {
   width: 100%;
@@ -27,11 +27,19 @@
 .image img {
   width: 100%;
 }
+.price {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 31%;
+  border: 1px solid #eff2f5;
+  border-radius: 10px;
+  background-color: #fafdff;
+}
 .info {
   width: 100%;
   display: flex;
-  /* justify-content: space-between; */
-  flex-direction: column;
+  justify-content: space-between;
   text-align: center;
   padding: 10px 5px;
 }
@@ -52,8 +60,8 @@
 }
 .biddInfo {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  width: 100%;
+  justify-content: space-between;
 }
 .timer {
   display: flex;

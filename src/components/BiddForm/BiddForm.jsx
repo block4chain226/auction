@@ -1,7 +1,7 @@
 import React from "react";
 import MyButton from "../../Ui/MyButton/MyButton";
 import LoadingSpin from "react-loading-spin";
-import cl from "./BiddAuction.module.css";
+import cl from "./BiddForm.module.css";
 import Countdown from "react-countdown";
 import { useContext, useState } from "react";
 import "../../index.scss";
@@ -9,10 +9,9 @@ import BiddContext from "../../context/BiddContext";
 import { useEffect } from "react";
 import ProviderContext from "../../context/ProviderContext";
 import AuthContext from "../../context/AuthContext";
-import BiddForm from "../BiddForm/BiddForm";
 const ethers = require("ethers");
 
-const BiddAuction = ({ auction, time, closeBidd }) => {
+const BiddForm = ({ auction }) => {
   const { accounts } = useContext(AuthContext);
   const { auctionContract } = useContext(ProviderContext);
   const { bidd, setBidd } = useContext(BiddContext);
@@ -20,13 +19,13 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
 
   async function riseBidd(e) {
     if (
-      Number(bidd.newBidd) !== undefined &&
-      Number(bidd.newBidd) > Number(auction.highestPrice)
+      Number(bidd) !== undefined &&
+      Number(bidd) > Number(auction.highestPrice)
     ) {
       setIsStillPay(true);
       const bidded = await auctionContract.riseBid(auction.auctionId, {
         from: accounts[0],
-        value: ethers.utils.parseUnits(String(bidd.newBidd), "wei"),
+        value: ethers.utils.parseUnits(String(bidd), "wei"),
       });
       await bidded.wait();
       await getAuctionHighestPrice(auction.auctionId);
@@ -38,7 +37,7 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
     try {
       const auctionUpdate = await auctionContract.getAuction(auctionId);
       auction = auctionUpdate;
-      setBidd({ newBidd: auctionUpdate.highestPrice });
+      setBidd(auctionUpdate.highestPrice);
       sessionStorage.setItem(
         `bidd${auction.auctionId}`,
         auctionUpdate.highestPrice
@@ -48,27 +47,48 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
       console.log("error: ", err);
     }
   }
-
+  console.log(auction);
   useEffect(() => {
     if (!sessionStorage.getItem(`bidd${auction.auctionId}`)) {
-      setBidd({ newBidd: auction.highestPrice });
+      setBidd(auction.highestPrice);
     }
     if (sessionStorage.getItem(`bidd${auction.auctionId}`)) {
-      setBidd({ newBidd: sessionStorage.getItem(`bidd${auction.auctionId}`) });
+      setBidd(sessionStorage.getItem(`bidd${auction.auctionId}`));
     }
     console.log(sessionStorage.getItem(`bidd${auction.auctionId}`));
   }, []);
-
   return (
     <>
       <div key={auction.auctionId} className={cl.bidd}>
         <div className={cl.item}>
-          <div className={cl.image}>
-            <img src={auction.image}></img>
-          </div>
           <div className={cl.info}>
-            <Countdown className={cl.text} date={Date.now() + time} />
-            <BiddForm auction={auction} closeBidd={closeBidd} />
+            <div className={cl.biddInfo}>
+              <div className={cl.price}>
+                <p> Start price</p>
+
+                <input readOnly value={auction.startPrice} />
+              </div>
+              <div className={cl.price}>
+                <p> Best offer</p>
+                {/* <input readOnly value={bidd} /> */}
+                <p>{bidd}</p>
+                {/* {isStillPay ? <LoadingSpin /> : ""} */}
+              </div>
+              <div className={cl.price}>
+                <p> Your offer</p>
+                <input
+                  onChange={(e) => {
+                    setBidd(e.target.value);
+                  }}
+                />
+                <MyButton
+                  data-index={Number(auction.auctionId)}
+                  onClick={(e) => riseBidd(e)}
+                >
+                  Offer
+                </MyButton>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -76,4 +96,4 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
   );
 };
 
-export default BiddAuction;
+export default BiddForm;

@@ -85,8 +85,8 @@ const MyAuctions = ({ auction }) => {
               <div className={cl.timePassed}></div>
               <div className={cl.bidder}>
                 <label for="bidder">
-                  bidder
-                  <input name="bidder" />
+                  Last price
+                  <input name="bidder" value={auction.highestPrice} onlyRead />
                 </label>
               </div>
               <div data-auctionId={auction.auctionId} className={cl.stop}>
