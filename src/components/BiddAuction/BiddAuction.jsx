@@ -16,6 +16,7 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
   const { accounts } = useContext(AuthContext);
   const { auctionContract } = useContext(ProviderContext);
   const { bidd, setBidd } = useContext(BiddContext);
+  const [isWithdraw, setIsWithdraw] = useState(false);
   const [isStillPay, setIsStillPay] = useState(false);
 
   async function riseBidd(e) {
@@ -62,7 +63,26 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
   return (
     <>
       <div key={auction.auctionId} className={cl.bidd}>
-        <div className={cl.item}>
+        <div className={cl.col}>
+          <div className={cl.image}>
+            <img src={auction.image} />
+          </div>
+          <div className={cl.content}>
+            <div className={cl.timer}>
+              <Countdown date={Date.now() + time} />
+            </div>
+            <div className={cl.biddContainer}>
+              <BiddForm auction={auction} />
+            </div>
+            <div className={cl.info}>
+              <div className={cl.title}>
+                <h1>{auction.title}</h1>
+              </div>
+              <div className={cl.text}>{auction.text}</div>
+            </div>
+          </div>
+        </div>
+        {/* <div className={cl.item}>
           <div className={cl.image}>
             <img src={auction.image}></img>
           </div>
@@ -70,7 +90,7 @@ const BiddAuction = ({ auction, time, closeBidd }) => {
             <Countdown className={cl.text} date={Date.now() + time} />
             <BiddForm auction={auction} closeBidd={closeBidd} />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );

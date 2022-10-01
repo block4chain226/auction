@@ -47,7 +47,7 @@ const BiddForm = ({ auction }) => {
       console.log("error: ", err);
     }
   }
-  console.log(auction);
+
   useEffect(() => {
     if (!sessionStorage.getItem(`bidd${auction.auctionId}`)) {
       setBidd(auction.highestPrice);
@@ -66,12 +66,12 @@ const BiddForm = ({ auction }) => {
               <div className={cl.price}>
                 <p> Start price</p>
 
-                <input readOnly value={auction.startPrice} />
+                <input readOnly defaultValue={auction.startPrice} />
               </div>
               <div className={cl.price}>
                 <p> Best offer</p>
-                {/* <input readOnly value={bidd} /> */}
-                <p>{bidd}</p>
+                <input readOnly value={bidd} />
+                {/* <p>{bidd}</p> */}
                 {/* {isStillPay ? <LoadingSpin /> : ""} */}
               </div>
               <div className={cl.price}>
