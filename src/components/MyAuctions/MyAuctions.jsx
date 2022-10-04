@@ -8,6 +8,7 @@ import cl from "./MyAuctions.module.css";
 import { useRef } from "react";
 import ProviderContext from "../../context/ProviderContext";
 import AuthContext from "../../context/AuthContext";
+import BiddForm from "../BiddForm/BiddForm";
 
 const MyAuctions = ({ auction }) => {
   const { accounts } = useContext(AuthContext);
@@ -60,44 +61,34 @@ const MyAuctions = ({ auction }) => {
     <>
       {showAuction ? (
         <div className={cl.col}>
-          <div className={cl.item}>
-            <div className={cl.image}>
-              <img src={auction.image}></img>
-              <p>{auction.totalTime}</p>
+          <div className={cl.image}>
+            <img src={auction.image} />
+          </div>
+          <div className={cl.content}>
+            <div className={cl.timer}>
+              <Countdown date={Date.now() + time} />
+            </div>
+            <div className={cl.biddContainer}>
+              <div>
+                <p>Start price</p>
+                <p>{auction.startPrice.toString()}</p>
+              </div>
+              <div>
+                <p>Best offer</p>
+                <p>{auction.highestPrice.toString()}</p>
+              </div>
             </div>
             <div className={cl.info}>
-              <div className={cl.title}>{auction.title}</div>
+              <div className={cl.title}>
+                <h1>{auction.title}</h1>
+              </div>
               <div className={cl.text}>{auction.text}</div>
-              <div data-auctionId={auction.auctionId} className={cl.leftTime}>
-                {time > 0 && !isWithdraw ? (
-                  <Countdown
-                    databoard={Number(auction.auctionId)}
-                    ref={titleRef}
-                    onComplete={(e) => {
-                      endAuction(e);
-                    }}
-                    date={Date.now() + time}
-                  />
-                ) : (
-                  <MyButton onClick={withdraw}>Withdraw</MyButton>
-                )}
-              </div>
-              <div className={cl.timePassed}></div>
-              <div className={cl.bidder}>
-                <label for="bidder">
-                  Last price
-                  <input name="bidder" value={auction.highestPrice} onlyRead />
-                </label>
-              </div>
-              <div data-auctionId={auction.auctionId} className={cl.stop}>
-                <button data-index={Number(auction.auctionId)}>
-                  Stop Auction
-                </button>
-              </div>
             </div>
           </div>
+          {/* <div className="cross" onClick={() => closeBidd()}></div> */}
         </div>
       ) : (
+        // </div>
         ""
       )}
     </>

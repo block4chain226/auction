@@ -1,14 +1,20 @@
+.participation {
+  width: 50%;
+}
 .col {
   box-sizing: border-box;
-  width: 50%;
+  /* width: 50%; */
   background-color: #ffffff;
-  padding: 20px;
+  /* padding: 20px; */
   margin-bottom: 20px;
   display: flex;
   justify-content: space-between;
 }
+.participation h2 {
+  color: rgb(209, 152, 152);
+  text-align: right;
+}
 .image {
-  background-color: burlywood;
   width: 30%;
   border-radius: 20px;
 }

@@ -7,6 +7,7 @@ import useFetchCIDs from "../hooks/useFetchCIDs";
 import { useState } from "react";
 import MyAuctions from "../components/MyAuctions/MyAuctions";
 import useFetchNftsData from "../hooks/useFetchNftsData";
+import Loading from "../Ui/MyButton/Loading/Loading";
 
 const ActiveAuctions = () => {
   const [activeAuctions, setActiveAuctions] = useState([]);
@@ -54,7 +55,7 @@ const ActiveAuctions = () => {
           marginTop: "100px",
         }}
       >
-        {loading ? <LoadingSpin /> : ""}
+        {loading ? <Loading /> : ""}
         {activeAuctions.length ? (
           activeAuctions.map((item) => <MyAuctions auction={item} />)
         ) : (

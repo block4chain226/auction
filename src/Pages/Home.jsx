@@ -7,6 +7,7 @@ import AuthContext from "../context/AuthContext";
 import Dashboard from "../components/Dashboard/Dashboard";
 import { useState } from "react";
 import { useEffect } from "react";
+import Loading from "../Ui/MyButton/Loading/Loading";
 
 const Home = () => {
   const { accounts } = useContext(AuthContext);
@@ -35,30 +36,30 @@ const Home = () => {
 
   return (
     <>
-      {/* <div
+      <div
         style={{
           width: "100%",
-          padding: "10px",
+          padding: "10px 20%",
           display: "flex",
+          justifyContent: "center",
           flexWrap: "wrap",
           boxSizing: "border-box",
-          justifyContent: "center",
           marginTop: "100px",
         }}
-      > */}
-      {loading ? <p>Loading...</p> : ""}
+      >
+        {loading ? <Loading /> : ""}
 
-      {activeAuctions && activeAuctions !== undefined
-        ? activeAuctions.map((item, index) =>
-            !accounts.length ||
-            item.owner.toLowerCase() !== accounts[0].toLowerCase() ? (
-              <Dashboard activeAuction={item} />
-            ) : (
-              ""
+        {activeAuctions && activeAuctions !== undefined
+          ? activeAuctions.map((item, index) =>
+              !accounts.length ||
+              item.owner.toLowerCase() !== accounts[0].toLowerCase() ? (
+                <Dashboard activeAuction={item} />
+              ) : (
+                ""
+              )
             )
-          )
-        : "You have not NFT's..."}
-      {/* </div> */}
+          : "You have not NFT's..."}
+      </div>
     </>
   );
 };

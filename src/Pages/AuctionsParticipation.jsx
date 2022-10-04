@@ -8,6 +8,7 @@ import AuthContext from "../context/AuthContext";
 import { useState } from "react";
 import { useEffect } from "react";
 import MyParticipation from "../components/MyParticipation/MyParticipation";
+import Loading from "../Ui/MyButton/Loading/Loading";
 
 const AuctionsParticipation = () => {
   const { accounts } = useContext(AuthContext);
@@ -46,7 +47,7 @@ const AuctionsParticipation = () => {
           marginTop: "100px",
         }}
       >
-        {loading ? <LoadingSpin /> : ""}
+        {loading ? <Loading /> : ""}
         {auctionsParticipation.length ? (
           auctionsParticipation.map((item) => (
             <MyParticipation auction={item} />

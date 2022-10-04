@@ -4,6 +4,7 @@ import LoadingSpin from "react-loading-spin";
 import AuthContext from "../context/AuthContext";
 import useFetchCIDs from "../hooks/useFetchCIDs";
 import useFetchNftsData from "../hooks/useFetchNftsData";
+import Loading from "../Ui/MyButton/Loading/Loading";
 
 const MyNft = () => {
   const { accounts } = useContext(AuthContext);
@@ -25,7 +26,7 @@ const MyNft = () => {
           marginTop: "100px",
         }}
       >
-        {loading ? <LoadingSpin /> : ""}
+        {loading ? <Loading /> : ""}
 
         {fetchedData && fetchedData !== undefined ? (
           <NftItem links={fetchedData} tokensId={tokensId} />

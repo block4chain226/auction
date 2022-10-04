@@ -50,17 +50,20 @@ const NftItem = ({ arr, links, tokensId }) => {
             >
               <div className={cl.image}>
                 <img src={item[1]}></img>
+                <div className={cl.buttonHover}>
+                  <MyButton
+                    data-id={tokensId[index]}
+                    data-index={index}
+                    onClick={(e) => {
+                      startAuction(e);
+                    }}
+                    style={{ width: "100%", display: "inline-block" }}
+                  >
+                    Start Auction
+                  </MyButton>
+                </div>
               </div>
             </div>
-            <MyButton
-              data-id={tokensId[index]}
-              data-index={index}
-              onClick={(e) => {
-                startAuction(e);
-              }}
-            >
-              Start Auction
-            </MyButton>
           </div>
         ))}
       {index.length && !createAuction > 0 ? (

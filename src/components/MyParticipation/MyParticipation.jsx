@@ -4,7 +4,6 @@ import Countdown from "react-countdown";
 import cl from "./MyParticipation.module.css";
 import ProviderContext from "../../context/ProviderContext";
 import AuthContext from "../../context/AuthContext";
-import BiddAuction from "../BiddAuction/BiddAuction";
 import BiddForm from "../BiddForm/BiddForm";
 
 const MyParticipation = ({ auction }) => {
@@ -14,6 +13,7 @@ const MyParticipation = ({ auction }) => {
   const [time, setTime] = useState("");
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [showAuction, setShowAuction] = useState(true);
+  const [error, setError] = useState("");
 
   function getTimeLeft() {
     const endtime = auction.totalTime * 1000;
@@ -36,22 +36,25 @@ const MyParticipation = ({ auction }) => {
     }
   }
 
+  function showError(message) {
+    setError(message);
+  }
+
   useEffect(() => {
     getTimeLeft();
   }, [auction]);
 
   return (
     <>
-      {/* {showAuction ? (
-        <div className={cl.col}>
-          <div className={cl.item}>
+      {showAuction ? (
+        <div className={cl.participation}>
+          <h2>{error}</h2>
+          <div className={cl.col}>
             <div className={cl.image}>
-              <img src={auction.image}></img>
+              <img src={auction.image} />
             </div>
-            <div className={cl.info}>
-              <div className={cl.title}>{auction.title}</div>
-              <div className={cl.text}>{auction.text}</div>
-              <div className={cl.leftTime}>
+            <div className={cl.content}>
+              <div className={cl.timer}>
                 {time > 0 && !isWithdraw ? (
                   <Countdown
                     onComplete={() => setIsWithdraw(true)}
@@ -64,45 +67,15 @@ const MyParticipation = ({ auction }) => {
                   "You will get your money when auction owner will get his nft"
                 )}
               </div>
-              <div className={cl.timePassed}></div>
-              <div className={cl.bidder}>
-                <BiddForm auction={auction} />
+              <div className={cl.biddContainer}>
+                <BiddForm auction={auction} time={time} showError={showError} />
               </div>
-
-              <div className={cl.stop}></div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        ""
-      )} */}
-      {showAuction ? (
-        <div className={cl.col}>
-          <div className={cl.image}>
-            <img src={auction.image} />
-          </div>
-          <div className={cl.content}>
-            <div className={cl.timer}>
-              {time > 0 && !isWithdraw ? (
-                <Countdown
-                  onComplete={() => setIsWithdraw(true)}
-                  date={Date.now() + time}
-                />
-              ) : auction.highestBidder.toLowerCase() !==
-                accounts[0].toLowerCase() ? (
-                <MyButton onClick={withdraw}>Withdraw</MyButton>
-              ) : (
-                "You will get your money when auction owner will get his nft"
-              )}
-            </div>
-            <div className={cl.biddContainer}>
-              <BiddForm auction={auction} />
-            </div>
-            <div className={cl.info}>
-              <div className={cl.title}>
-                <h1>{auction.title}</h1>
+              <div className={cl.info}>
+                <div className={cl.title}>
+                  <h1>{auction.title}</h1>
+                </div>
+                <div className={cl.text}>{auction.text}</div>
               </div>
-              <div className={cl.text}>{auction.text}</div>
             </div>
           </div>
         </div>

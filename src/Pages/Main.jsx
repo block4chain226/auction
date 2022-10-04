@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import Mint from "../components/Mint";
+import Mint from "../components/Mint/Mint";
 import AuthContext from "../context/AuthContext";
 import "../index.scss";
 

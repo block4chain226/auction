@@ -1,43 +1,55 @@
 import React from "react";
 import MyButton from "../../Ui/MyButton/MyButton";
-import LoadingSpin from "react-loading-spin";
 import cl from "./BiddForm.module.css";
-import Countdown from "react-countdown";
 import { useContext, useState } from "react";
 import "../../index.scss";
 import BiddContext from "../../context/BiddContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ProviderContext from "../../context/ProviderContext";
 import AuthContext from "../../context/AuthContext";
+import Loading from "../../Ui/MyButton/Loading/Loading";
 const ethers = require("ethers");
 
-const BiddForm = ({ auction }) => {
+const BiddForm = ({ auction, time, showError }) => {
   const { accounts } = useContext(AuthContext);
   const { auctionContract } = useContext(ProviderContext);
   const { bidd, setBidd } = useContext(BiddContext);
+  const [bestOffer, setBestOffer] = useState("");
   const [isStillPay, setIsStillPay] = useState(false);
+  const inputRef = useRef(null);
 
   async function riseBidd(e) {
-    if (
-      Number(bidd) !== undefined &&
-      Number(bidd) > Number(auction.highestPrice)
-    ) {
-      setIsStillPay(true);
-      const bidded = await auctionContract.riseBid(auction.auctionId, {
-        from: accounts[0],
-        value: ethers.utils.parseUnits(String(bidd), "wei"),
-      });
-      await bidded.wait();
-      await getAuctionHighestPrice(auction.auctionId);
-    } else {
-      console.log("Enter Bidd!");
+    try {
+      if (
+        Number(bidd) !== undefined && !sessionStorage.getItem("highestPrice")
+          ? Number(bidd) > Number(auction.highestPrice)
+          : Number(bidd) > Number(sessionStorage.getItem("highestPrice"))
+      ) {
+        console.log("high", auction.highestPrice);
+        setIsStillPay(true);
+        const bidded = await auctionContract.riseBid(auction.auctionId, {
+          from: accounts[0],
+          value: ethers.utils.parseUnits(String(bidd), "wei"),
+        });
+        await bidded.wait();
+        inputRef.current.value = "";
+        await getAuctionHighestPrice(auction.auctionId);
+      } else {
+        showError("empty offer field or offer value less than highest offer");
+        console.log("Enter Bidd!");
+      }
+    } catch (err) {
+      setIsStillPay(false);
     }
   }
   async function getAuctionHighestPrice(auctionId) {
     try {
       const auctionUpdate = await auctionContract.getAuction(auctionId);
+      sessionStorage.setItem("highestPrice", auctionUpdate.highestPrice);
       auction = auctionUpdate;
-      setBidd(auctionUpdate.highestPrice);
+
+      setBidd(undefined);
+      setBestOffer(bidd);
       sessionStorage.setItem(
         `bidd${auction.auctionId}`,
         auctionUpdate.highestPrice
@@ -47,15 +59,19 @@ const BiddForm = ({ auction }) => {
       console.log("error: ", err);
     }
   }
+  useEffect(() => {
+    showError("");
+  }, [bidd === undefined || bidd === ""]);
 
   useEffect(() => {
     if (!sessionStorage.getItem(`bidd${auction.auctionId}`)) {
       setBidd(auction.highestPrice);
+      setBestOffer(auction.highestPrice);
     }
     if (sessionStorage.getItem(`bidd${auction.auctionId}`)) {
       setBidd(sessionStorage.getItem(`bidd${auction.auctionId}`));
+      setBestOffer(sessionStorage.getItem(`bidd${auction.auctionId}`));
     }
-    console.log(sessionStorage.getItem(`bidd${auction.auctionId}`));
   }, []);
   return (
     <>
@@ -70,28 +86,34 @@ const BiddForm = ({ auction }) => {
               </div>
               <div className={cl.price}>
                 <p> Best offer</p>
-                <input readOnly value={bidd} />
-                {/* <p>{bidd}</p> */}
-                {/* {isStillPay ? <LoadingSpin /> : ""} */}
+                <input readOnly value={bestOffer} />
               </div>
-              <div className={cl.price}>
-                <p> Your offer</p>
-                <input
-                  onChange={(e) => {
-                    setBidd(e.target.value);
-                  }}
-                />
-                <MyButton
-                  data-index={Number(auction.auctionId)}
-                  onClick={(e) => riseBidd(e)}
-                >
-                  Offer
-                </MyButton>
-              </div>
+              {time > 1 ? (
+                <div className={cl.price}>
+                  <p> Your offer</p>
+
+                  <input
+                    type="number"
+                    ref={inputRef}
+                    onChange={(e) => {
+                      setBidd(e.target.value);
+                    }}
+                  />
+                  <MyButton
+                    data-index={Number(auction.auctionId)}
+                    onClick={(e) => riseBidd(e)}
+                  >
+                    Offer
+                  </MyButton>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
       </div>
+      {isStillPay ? <Loading /> : ""}
     </>
   );
 };
